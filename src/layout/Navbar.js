@@ -1,7 +1,7 @@
 import { Button } from 'bootstrap'
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'
-import ConfirmationPopup from './ConfirmationPopup';
+import ConfirmationPopup from '../components/ConfirmationPopup';
 
 export default function Navbar() {
     const [showPopup, setShowPopup] = useState(false);

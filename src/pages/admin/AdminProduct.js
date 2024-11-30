@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import '../assets/styles/AdminHome.css';
+import '../../assets/styles/AdminProduct.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-const AdminHome = () => {
+const AdminProduct = () => {
   const [isProductMenuVisible, setIsProductMenuVisible] = useState(false);
 
   // Dữ liệu giả để hiển thị bảng
@@ -104,4 +104,4 @@ const AdminHome = () => {
   );
 };
 
-export default AdminHome;
+export default AdminProduct;

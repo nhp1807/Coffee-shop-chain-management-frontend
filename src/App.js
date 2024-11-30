@@ -7,8 +7,9 @@ import { BrowserRouter, Routes, Route, Router } from 'react-router-dom';
 import UpdateAccount from './entity/accounts/UpdateAccount';
 import ViewAccount from './entity/accounts/ViewAccount';
 import LoginForm from './pages/LoginForm';
-import AdminHome from './pages/AdminHome';
-import ManagerHome from './pages/ManagerHome';
+import AdminHome from './pages/admin/AdminHome';
+import AdminProduct from './pages/admin/AdminProduct';
+import ManagerHome from './pages/manager/ManagerHome';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route exact path="/home" element={<Home />} />
           <Route exact path="/login" element={<LoginForm />} />
           <Route exact path="/admin/home" element={<AdminHome />} />
+          <Route exact path="/admin/product" element={<AdminProduct />} />
           <Route exact path="/manager/home" element={<ManagerHome />} />
           <Route exact path="/viewaccount/:id" element={<ViewAccount />} />
           <Route exact path="/createaccount" element={<CreateAccount />} />

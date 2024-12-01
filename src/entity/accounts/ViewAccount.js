@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import {Link, useNavigate, useParams } from 'react-router-dom';
+import AdminSideBar from '../../components/sidebar/AdminSideBar';
+import '../../assets/styles/ViewAccount.css';
 
 export default function ViewAccount() {
     
@@ -26,43 +28,24 @@ export default function ViewAccount() {
         setAccount(result.data.data)
     }
 
-
     return (
-        <div className="container">
-            <div className="row">
-                <div className="col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
-                    <h2 className="text-center m-4">Account Information</h2>
-
-                    <div className='card'>
-                        <div className='card-header'>
-                            Details of account:
-                            <ul className='list-group list-group-flush'>
-                                <li className='list-group-item'>
-                                    <b>Username: </b>
-                                    {account.username}
-                                </li>
-                                <li className='list-group-item'>
-                                    <b>Role: </b>
-                                    {account.role}
-                                </li>
-                                <li className='list-group-item'>
-                                    <b>ChatID: </b>
-                                    {account.chatID}
-                                </li>
-                                <li className='list-group-item'>
-                                    <b>Email: </b>
-                                    {account.email}
-                                </li>
-                                <li className='list-group-item'>
-                                    <b>BranchID: </b>
-                                    {account.branchID}
-                                </li>
-                            </ul>
-                        </div>
+        <div className="admin-page">
+    <AdminSideBar />
+    <div className="content">
+        <div className="menu">
+            <h3>Account Information</h3>
+            <p>Home > Accounts > View</p>
+            <div className="view-account">
+                {Object.entries(account).map(([key, value]) => (
+                    <div className="view-account-item" key={key}>
+                        <label>{key.charAt(0).toUpperCase() + key.slice(1)}</label>
+                        <p>{value}</p>
                     </div>
-                    <Link className='btn btn-primary my-2' to = {"/"}>Back to home</Link>
-                </div>
+                ))}
             </div>
         </div>
+    </div>
+</div>
+
     )
 }

@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import '../../assets/styles/AdminProduct.css';
+import '../../assets/styles/AdminObject.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import AdminSideBar from "../../components/sidebar/AdminSideBar";
 
 const AdminProduct = () => {
-  const [isProductMenuVisible, setIsProductMenuVisible] = useState(false);
-
   // Dữ liệu giả để hiển thị bảng
   const [items, setItems] = useState([
     { id: 1, title: 'A', description: 'Some Description', actions: ['View', 'Edit', 'Delete'] },
@@ -20,34 +19,9 @@ const AdminProduct = () => {
     console.log(e.target.value); // Xử lý tìm kiếm
   };
 
-  // Hàm hiển thị/ẩn menu Product
-  const toggleProductMenu = () => {
-    setIsProductMenuVisible(!isProductMenuVisible);
-  };
-
   return (
     <div className="admin-page">
-      <div className="sidebar">
-        <h2>LOGO</h2>
-        <ul>
-          <li><button><i class="bi bi-house"></i>Home</button></li>
-          <li>
-            <button onClick={toggleProductMenu}><i class="bi bi-cup"></i>Product</button>
-            {/* Hiển thị Menu, Material, Import Order nếu isProductMenuVisible là true */}
-            {isProductMenuVisible && (
-              <ul>
-                <li><button>Menu</button></li>
-                <li><button>Material</button></li>
-                <li><button>Import Order</button></li>
-              </ul>
-            )}
-          </li>
-          <li><button><i class="bi bi-arrow-down-square"></i>Supplier</button></li>
-          <li><button><i class="bi bi-shop"></i>Branch</button></li>
-          <li><button><i class="bi bi-people-fill"></i>Employee</button></li>
-          <li><button><i class="bi bi-person-circle"></i>Account</button></li>
-        </ul>
-      </div>
+      <AdminSideBar />
 
       <div className="content">
         <div className="header">

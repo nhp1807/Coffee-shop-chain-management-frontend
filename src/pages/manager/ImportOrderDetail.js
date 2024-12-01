@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import ManagerSideBar from "../../components/sidebar/ManagerSideBar"; // Sidebar
 import "../../assets/styles/AdminObject.css"; // CSS Style
 import "../../assets/styles/Suggestion.css";
-import { Modal, Button } from "react-bootstrap"; // Để sử dụng modal
+import { Modal } from "react-bootstrap"; // Để sử dụng modal
 
 const ImportOrderDetail = () => {
     const { importOrderId } = useParams();
@@ -24,7 +24,7 @@ const ImportOrderDetail = () => {
     const [branches, setBranches] = useState([]);
     const [materials, setMaterials] = useState([]); // Dữ liệu nguyên liệu (Material)
     const [newDetail, setNewDetail] = useState({
-        materialName: "", // Thay đổi từ materialID thành materialName để người dùng nhập tay
+        materialName: "", // Đảm bảo có giá trị khởi tạo
         quantity: 0,
         price: 0,
         description: "",
@@ -34,11 +34,18 @@ const ImportOrderDetail = () => {
     const [filteredMaterials, setFilteredMaterials] = useState([]); // Lưu trữ danh sách vật liệu lọc được
 
     useEffect(() => {
-        loadSuppliersAndBranches();
-        loadMaterials(); // Tải dữ liệu vật liệu khi khởi tạo
-        if (importOrderId !== "new") {
-            loadImportOrder(importOrderId);
-        }
+        const loadData = async () => {
+            try {
+                await loadSuppliersAndBranches();
+                await loadMaterials();
+                if (importOrderId !== "new") {
+                    await loadImportOrder(importOrderId);
+                }
+            } catch (error) {
+                console.error("Error loading data:", error);
+            }
+        };
+        loadData();
     }, [importOrderId]);
 
     const loadSuppliersAndBranches = async () => {
@@ -99,7 +106,13 @@ const ImportOrderDetail = () => {
     };
 
     const addDetail = async () => {
-        // Gửi chi tiết mới lên API để thêm vào Import Order
+        if (!newDetail.materialName || !newDetail.quantity || !newDetail.price) {
+            alert("Please fill in all fields before adding detail.");
+            return;
+        }
+
+        console.log("Adding detail:", newDetail);
+
         try {
             const response = await axios.put(`http://localhost:8080/api/import-order/add/${importOrderId}`, newDetail);
             setImportOrder((prevOrder) => ({
@@ -115,8 +128,9 @@ const ImportOrderDetail = () => {
     const handleDeleteDetail = async (materialId) => {
         try {
             // Gọi API để xóa chi tiết
+            console.log("API DELETE:", `http://localhost:8080/api/import-order/delete/${importOrderId}/${materialId}`);
             await axios.delete(`http://localhost:8080/api/import-order/delete/${importOrderId}/${materialId}`);
-            
+
             // Cập nhật lại danh sách chi tiết sau khi xóa
             setImportOrder((prevOrder) => ({
                 ...prevOrder,
@@ -128,7 +142,7 @@ const ImportOrderDetail = () => {
             console.error("Error deleting detail:", error);
         }
     };
-    
+
 
     const handleMaterialSearch = (e) => {
         const searchTerm = e.target.value.toLowerCase();
@@ -141,12 +155,17 @@ const ImportOrderDetail = () => {
     };
 
     const handleMaterialSelect = (materialName) => {
+        if (!materialName) {
+            console.error("Material name is required!");
+            return;
+        }
         setNewDetail({
             ...newDetail,
             materialName: materialName,
         });
         setFilteredMaterials([]);  // Đóng danh sách gợi ý khi đã chọn
     };
+
 
     return (
         <div className="admin-page">
@@ -198,6 +217,20 @@ const ImportOrderDetail = () => {
                     </select>
                 </div>
 
+                <div className="form-group">
+                    <label>Payment Method</label>
+                    <select
+                        className="form-control"
+                        value={importOrder.paymentMethod}
+                        onChange={(e) =>
+                            setImportOrder({ ...importOrder, paymentMethod: e.target.value })
+                        }
+                    >
+                        <option value="cash">Cash</option>
+                        <option value="bank">Bank</option>
+                    </select>
+                </div>
+
                 {/* Table to display details */}
                 <h3>Details</h3>
                 <table className="table">
@@ -211,17 +244,16 @@ const ImportOrderDetail = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {importOrder.detailImportOrders.length > 0 ? (
+                        {importOrder?.detailImportOrders?.length > 0 ? (
                             importOrder.detailImportOrders.map((detail, index) => (
                                 <tr key={index}>
-                                    <td>{detail.materialName}</td>
+                                    <td>{detail.materialName || "Unknown Material"}</td> {/* Hiển thị giá trị mặc định nếu materialName là undefined */}
                                     <td>{detail.quantity}</td>
                                     <td>{detail.price}</td>
                                     <td>{detail.description}</td>
                                     <td>
-                                        {/* Nút xóa */}
                                         <button
-                                            className="btn btn-danger"
+                                            className="action-btn"
                                             onClick={() => handleDeleteDetail(detail.materialId)}
                                         >
                                             Delete
@@ -237,7 +269,6 @@ const ImportOrderDetail = () => {
                             </tr>
                         )}
                     </tbody>
-
                 </table>
 
                 <button className="action-btn" onClick={() => setShowModal(true)}>
@@ -258,7 +289,7 @@ const ImportOrderDetail = () => {
                             <input
                                 type="text"
                                 className="form-control"
-                                value={newDetail.name}
+                                value={newDetail.materialName}
                                 onChange={handleMaterialSearch}
                                 placeholder="Enter material name"
                             />

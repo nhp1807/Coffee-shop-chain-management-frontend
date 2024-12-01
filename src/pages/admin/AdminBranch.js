@@ -3,7 +3,7 @@ import axios from "axios";
 import "../../assets/styles/AdminObject.css"; // CSS riêng cho Branch
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import SideBar from "../../components/sidebar/AdminSideBar";
+import AdminSideBar from "../../components/sidebar/AdminSideBar";
 
 const AdminBranch = () => {
     const [branches, setBranches] = useState([]);
@@ -52,7 +52,7 @@ const AdminBranch = () => {
 
     return (
         <div className="admin-page">
-            <SideBar />
+            <AdminSideBar />
 
             <div className="content">
                 <div className="header">

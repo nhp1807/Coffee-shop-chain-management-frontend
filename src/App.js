@@ -15,6 +15,7 @@ import AdminSupplier from './pages/admin/AdminSupplier';
 import ManagerEmployee from './pages/manager/ManagerEmployee';
 import ManagerImportOrder from './pages/manager/ManagerImportOrder';
 import AdminMaterial from './pages/admin/AdminMaterial';
+import ImportOrderDetail from './pages/manager/ImportOrderDetail';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route exact path="/manager/home" element={<ManagerHome />} />
           <Route exact path="/manager/employee" element={<ManagerEmployee />} />
           <Route exact path="/manager/import-order" element={<ManagerImportOrder />} />
+          <Route exact path="/manager/import-order/detail/:importOrderId" element={<ImportOrderDetail />} />
 
           <Route exact path="/viewaccount/:id" element={<ViewAccount />} />
           <Route exact path="/createaccount" element={<CreateAccount />} />

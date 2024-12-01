@@ -3,7 +3,7 @@ import axios from "axios";
 import "../../assets/styles/AdminObject.css"; // Sử dụng lại CSS của AdminProduct
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import SideBar from "../../components/sidebar/AdminSideBar";
+import ManagerSideBar from "../../components/sidebar/ManagerSideBar";
 
 const AdminEmployee = () => {
     const [employees, setEmployees] = useState([]);
@@ -74,7 +74,7 @@ const AdminEmployee = () => {
 
     return (
         <div className="admin-page">
-            <SideBar />
+            <ManagerSideBar />
 
             <div className="content">
                 <div className="header">

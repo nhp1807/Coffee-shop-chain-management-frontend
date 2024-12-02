@@ -62,11 +62,11 @@ const AdminImportOrder = () => {
     };
 
     const handleAddImportOrder = () => {
-        navigate("/manager/import-order/detail/new");
+        navigate("/admin/import-order/detail/new");
     };
 
     const handleViewEditOrder = (importOrderId) => {
-        navigate(`/manager/import-order/detail/${importOrderId}`);
+        navigate(`/admin/import-order/detail/${importOrderId}`);
     };
 
     const handleConfirmOrder = async (importOrderId) => {

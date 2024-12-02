@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../../assets/styles/AdminObject.css";
-import ManagerSideBar from "../../components/sidebar/ManagerSideBar";
+import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import { useNavigate } from "react-router-dom";
 
-const ManagerImportOrder = () => {
+const AdminImportOrder = () => {
     const [importOrders, setImportOrders] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const navigate = useNavigate();
@@ -55,8 +55,6 @@ const ManagerImportOrder = () => {
                 order.date = date.toLocaleDateString();
             });
 
-            // console.log("Enriched orders:", enrichedOrders);
-
             setImportOrders(enrichedOrders);
         } catch (error) {
             console.error("Error loading import orders:", error);
@@ -71,13 +69,28 @@ const ManagerImportOrder = () => {
         navigate(`/manager/import-order/detail/${importOrderId}`);
     };
 
+    const handleConfirmOrder = async (importOrderId) => {
+        try {
+            const response = await axios.post(`http://localhost:8080/api/import-order/confirm/${importOrderId}`);
+            if (response.status === 200) {
+                alert("Order confirmed successfully!");
+                loadImportOrders(); // Reload orders after confirming
+            } else {
+                alert("Failed to confirm order.");
+            }
+        } catch (error) {
+            console.error("Error confirming order:", error);
+            alert("An error occurred while confirming the order.");
+        }
+    };
+
     const filteredImportOrders = importOrders.filter((importOrders) =>
         importOrders.date.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
         <div className="admin-page">
-            <ManagerSideBar />
+            <AdminSideBar />
             <div className="content">
                 <div className="header">
                     <h1>Import Orders</h1>
@@ -129,6 +142,12 @@ const ManagerImportOrder = () => {
                                     >
                                         View/Edit
                                     </button>
+                                    <button
+                                        className="action-btn confirm-btn"
+                                        onClick={() => handleConfirmOrder(order.importID)}
+                                    >
+                                        Confirm
+                                    </button>
                                 </td>
                             </tr>
                         ))}
@@ -139,4 +158,4 @@ const ManagerImportOrder = () => {
     );
 };
 
-export default ManagerImportOrder;
+export default AdminImportOrder;

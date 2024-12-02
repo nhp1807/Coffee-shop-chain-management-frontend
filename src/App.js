@@ -16,6 +16,8 @@ import ManagerEmployee from './pages/manager/ManagerEmployee';
 import ManagerImportOrder from './pages/manager/ManagerImportOrder';
 import AdminMaterial from './pages/admin/AdminMaterial';
 import ImportOrderDetail from './pages/manager/ImportOrderDetail';
+import AdminImportOrder from './pages/admin/AdminImportOrder';
+import AdminEmployee from './pages/admin/AdminEmployee';
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
           <Route exact path="/admin/product" element={<AdminProduct />} /> // TODO
           <Route exact path="/admin/material" element={<AdminMaterial />} />
           <Route exact path="/admin/supplier" element={<AdminSupplier />} />
+          <Route exact path="/admin/import-order" element={<AdminImportOrder />} />
+          <Route exact path="/admin/employee" element={<AdminEmployee />} />
           <Route exact path="/admin/account/get/:id" element={<ViewAccount />} />
 
           <Route exact path="/manager/home" element={<ManagerHome />} />

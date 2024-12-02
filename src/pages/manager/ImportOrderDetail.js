@@ -16,8 +16,8 @@ const ImportOrderDetail = () => {
         paymentMethod: "cash",
         date: "",
         status: "",
-        supplierId: "",
-        branchId: "",
+        supplierID: "",
+        branchID: "",
         detailImportOrders: [],
     });
     const [suppliers, setSuppliers] = useState([]);
@@ -54,6 +54,7 @@ const ImportOrderDetail = () => {
                 axios.get("http://localhost:8080/api/supplier/get/all"),
                 axios.get("http://localhost:8080/api/branch/get/all"),
             ]);
+
             setSuppliers(suppliersRes.data.data || []);
             setBranches(branchesRes.data.data || []);
         } catch (error) {
@@ -64,7 +65,6 @@ const ImportOrderDetail = () => {
     const loadMaterials = async () => {
         try {
             const response = await axios.get("http://localhost:8080/api/material/get/all");
-            // console.log("Materials:", response.data.data);
             setMaterials(response.data.data || []);
         } catch (error) {
             console.error("Error loading materials:", error);
@@ -79,12 +79,15 @@ const ImportOrderDetail = () => {
 
             // Get supplier and branch name
             const [supplierRes, branchRes] = await Promise.all([
-                axios.get(`http://localhost:8080/api/supplier/get/${response.data.data.supplierId}`),
-                axios.get(`http://localhost:8080/api/branch/get/${response.data.data.branchId}`),
+                axios.get(`http://localhost:8080/api/supplier/get/${response.data.data.supplierID}`),
+                axios.get(`http://localhost:8080/api/branch/get/${response.data.data.branchID}`),
             ]);
 
             response.data.data.supplierName = supplierRes.data.data.name;
             response.data.data.branchAddress = branchRes.data.data.address;
+            response.data.data.supplierID = supplierRes.data.data.supplierID;
+            response.data.data.branchID = branchRes.data.data.branchID;
+
 
             setImportOrder(response.data.data);
         } catch (error) {
@@ -111,8 +114,6 @@ const ImportOrderDetail = () => {
             return;
         }
 
-        console.log("Adding detail:", newDetail);
-
         try {
             const response = await axios.put(`http://localhost:8080/api/import-order/add/${importOrderId}`, newDetail);
             setImportOrder((prevOrder) => ({
@@ -127,8 +128,7 @@ const ImportOrderDetail = () => {
 
     const handleDeleteDetail = async (materialId) => {
         try {
-            // Gọi API để xóa chi tiết
-            console.log("API DELETE:", `http://localhost:8080/api/import-order/delete/${importOrderId}/${materialId}`);
+
             await axios.delete(`http://localhost:8080/api/import-order/delete/${importOrderId}/${materialId}`);
 
             // Cập nhật lại danh sách chi tiết sau khi xóa
@@ -185,14 +185,14 @@ const ImportOrderDetail = () => {
                     <label>Supplier</label>
                     <select
                         className="form-control"
-                        value={importOrder.supplierName}
+                        value={importOrder.supplierID || ""}
                         onChange={(e) =>
-                            setImportOrder({ ...importOrder, supplierId: e.target.value })
+                            setImportOrder({ ...importOrder, supplierID: e.target.value })
                         }
                     >
                         <option value="">-- Select Supplier --</option>
                         {suppliers.map((supplier) => (
-                            <option key={supplier.supplierId} value={supplier.supplierId}>
+                            <option key={supplier.supplierID} value={supplier.supplierID}>
                                 {supplier.name}
                             </option>
                         ))}
@@ -203,14 +203,14 @@ const ImportOrderDetail = () => {
                     <label>Branch</label>
                     <select
                         className="form-control"
-                        value={importOrder.branchAddress}
+                        value={importOrder.branchID || ""}
                         onChange={(e) =>
-                            setImportOrder({ ...importOrder, branchId: e.target.value })
+                            setImportOrder({ ...importOrder, branchID: e.target.value })
                         }
                     >
                         <option value="">-- Select Branch --</option>
                         {branches.map((branch) => (
-                            <option key={branch.branchId} value={branch.branchId}>
+                            <option key={branch.branchID} value={branch.branchID}>
                                 {branch.address}
                             </option>
                         ))}

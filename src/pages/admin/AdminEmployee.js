@@ -3,7 +3,7 @@ import axios from "axios";
 import "../../assets/styles/AdminObject.css"; // Sử dụng lại CSS của AdminProduct
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import ManagerSideBar from "../../components/sidebar/ManagerSideBar";
+import AdminSideBar from "../../components/sidebar/AdminSideBar";
 
 const AdminEmployee = () => {
     const [employees, setEmployees] = useState([]);
@@ -17,13 +17,18 @@ const AdminEmployee = () => {
         phone: "",
         email: "",
         address: "",
-        branchID: "", // Thêm branchID
+        branchID: "",
     });
 
     useEffect(() => {
         loadEmployees();
-        loadbranchs(); // Tải danh sách branchs khi trang load
+        loadbranchs(); 
     }, []);
+
+    // const loadEmployees = async () => {
+    //     const result = await axios.get("http://localhost:8080/api/employee/get/all");
+    //     setEmployees(result.data.data);
+    // };
 
     const loadEmployees = async () => {
         const employeeResult = await axios.get("http://localhost:8080/api/employee/get/all");
@@ -44,15 +49,15 @@ const AdminEmployee = () => {
         // Format date
         employeesWithBranch.forEach((employee) => {
             const date = new Date(employee.dob);
-            employee.dob     = date.toLocaleDateString();
+            employee.dob = date.toLocaleDateString();
         });
     
         setEmployees(employeesWithBranch);
     };
+    
 
     const loadbranchs = async () => {
         const result = await axios.get("http://localhost:8080/api/branch/get/all");
-        console.log("result:" + result.data.data);
         setbranchs(result.data.data);
     };
 
@@ -94,7 +99,7 @@ const AdminEmployee = () => {
 
     return (
         <div className="admin-page">
-            <ManagerSideBar />
+            <AdminSideBar />
 
             <div className="content">
                 <div className="header">

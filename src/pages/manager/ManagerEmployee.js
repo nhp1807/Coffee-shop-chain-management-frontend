@@ -7,7 +7,6 @@ import ManagerSideBar from "../../components/sidebar/ManagerSideBar";
 
 const AdminEmployee = () => {
     const [employees, setEmployees] = useState([]);
-    const [branchs, setbranchs] = useState([]); // Danh sách branch
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedEmployee, setSelectedEmployee] = useState(null); // Employee được chọn
     const [isEdit, setIsEdit] = useState(false); // Để phân biệt View/Edit
@@ -17,48 +16,37 @@ const AdminEmployee = () => {
         phone: "",
         email: "",
         address: "",
-        branchID: "", // Thêm branchID
+        branchID: "",
     });
 
+    const branchID = localStorage.getItem("branchID"); // Lấy branchID từ localStorage
+
     useEffect(() => {
-        loadEmployees();
-        loadbranchs(); // Tải danh sách branchs khi trang load
-    }, []);
+        if (branchID) {
+            loadEmployees(branchID);
+        }
+    }, [branchID]);
 
-    const loadEmployees = async () => {
-        const employeeResult = await axios.get("http://localhost:8080/api/employee/get/all");
-        const branchResult = await axios.get("http://localhost:8080/api/branch/get/all");
-        
-        // Lưu danh sách branchs
-        const branches = branchResult.data.data;
-    
-        // Kết hợp branch address vào danh sách employees
-        const employeesWithBranch = employeeResult.data.data.map((employee) => {
-            const branch = branches.find((b) => b.branchID === employee.branchID);
-            return {
-                ...employee,
-                branchAddress: branch ? branch.address : "N/A",
-            };
-        });
+    const loadEmployees = async (branchID) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/api/employee/get/branch/${branchID}`);
+            const employees = response.data.data;
 
-        // Format date
-        employeesWithBranch.forEach((employee) => {
-            const date = new Date(employee.dob);
-            employee.dob     = date.toLocaleDateString();
-        });
-    
-        setEmployees(employeesWithBranch);
-    };
+            // Format date
+            employees.forEach((employee) => {
+                const date = new Date(employee.dob);
+                employee.dob = date.toLocaleDateString();
+            });
 
-    const loadbranchs = async () => {
-        const result = await axios.get("http://localhost:8080/api/branch/get/all");
-        console.log("result:" + result.data.data);
-        setbranchs(result.data.data);
+            setEmployees(employees);
+        } catch (error) {
+            console.error("Failed to load employees:", error);
+        }
     };
 
     const deleteEmployee = async (id) => {
         await axios.delete(`http://localhost:8080/api/employee/delete/${id}`);
-        loadEmployees();
+        loadEmployees(branchID); // Load lại danh sách sau khi xóa
     };
 
     const handleViewEdit = (employee, isEditMode) => {
@@ -75,7 +63,7 @@ const AdminEmployee = () => {
             phone: "",
             email: "",
             address: "",
-            branchID: "", // Reset branchID
+            branchID: branchID, // Gán branchID cho employee mới
         });
     };
 
@@ -85,7 +73,7 @@ const AdminEmployee = () => {
         } else {
             await axios.post("http://localhost:8080/api/employee/create", newEmployee);
         }
-        loadEmployees();
+        loadEmployees(branchID);
     };
 
     const filteredEmployees = employees.filter((employee) =>
@@ -126,7 +114,6 @@ const AdminEmployee = () => {
                             <th>Phone</th>
                             <th>Email</th>
                             <th>Address</th>
-                            <th>Branch</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -139,7 +126,6 @@ const AdminEmployee = () => {
                                 <td>{employee.phone}</td>
                                 <td>{employee.email}</td>
                                 <td>{employee.address}</td>
-                                <td>{employee.branchAddress || "N/A"}</td> {/* Hiển thị tên branch */}
                                 <td>
                                     <button className="action-btn" data-bs-toggle="modal" data-bs-target="#employeeModal" onClick={() => handleViewEdit(employee, false)}>
                                         View
@@ -230,25 +216,6 @@ const AdminEmployee = () => {
                                             : setNewEmployee({ ...newEmployee, address: e.target.value })
                                     }
                                 />
-                            </div>
-                            <div className="form-group">
-                                <label>Branch</label>
-                                <select
-                                    className="form-control"
-                                    value={selectedEmployee ? selectedEmployee.branchID : newEmployee.branchID}
-                                    onChange={(e) =>
-                                        selectedEmployee
-                                            ? setSelectedEmployee({ ...selectedEmployee, branchID: e.target.value })
-                                            : setNewEmployee({ ...newEmployee, branchID: e.target.value })
-                                    }
-                                >
-                                    <option value="">-- Select branch --</option>
-                                    {branchs && branchs.map((branch) => (
-                                        <option key={branch.branchID} value={branch.branchID}>
-                                            {branch.address}
-                                        </option>
-                                    ))}
-                                </select>
                             </div>
                         </div>
 

@@ -38,6 +38,16 @@ const ImportOrderDetail = () => {
             try {
                 await loadSuppliersAndBranches();
                 await loadMaterials();
+    
+                // Lấy branchID từ localStorage
+                const storedBranchID = localStorage.getItem("branchID");
+                if (storedBranchID) {
+                    setImportOrder((prevOrder) => ({
+                        ...prevOrder,
+                        branchID: storedBranchID, // Cập nhật branchID từ localStorage
+                    }));
+                }
+    
                 if (importOrderId !== "new") {
                     await loadImportOrder(importOrderId);
                 }
@@ -47,6 +57,7 @@ const ImportOrderDetail = () => {
         };
         loadData();
     }, [importOrderId]);
+
 
     const loadSuppliersAndBranches = async () => {
         try {

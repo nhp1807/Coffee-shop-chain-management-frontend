@@ -27,9 +27,9 @@ const LoginForm = () => {
                 },
             });
 
-            if (response.data && response.data.role) {
-                const userRole = response.data.role;
-                handleLoginSuccess(userRole);
+            if (response.data) {
+                const { role, username, branchID } = response.data;
+                handleLoginSuccess(role, username, branchID);
             }
         } catch (error) {
             if (error.response && error.response.data) {
@@ -40,7 +40,12 @@ const LoginForm = () => {
         }
     };
 
-    const handleLoginSuccess = (role) => {
+
+    const handleLoginSuccess = (role, username, branchID) => {
+        localStorage.setItem("role", role);
+        localStorage.setItem("username", username);
+        localStorage.setItem("branchID", branchID);
+
         if (role === "ROLE_ADMIN") {
             navigate("/admin/home");
         } else if (role === "ROLE_MANAGER") {

@@ -8,6 +8,7 @@ const ManagerImportOrder = () => {
     const [importOrders, setImportOrders] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const navigate = useNavigate();
+    const branchID = localStorage.getItem("branchID"); // Lấy branchID từ localStorage
 
     useEffect(() => {
         loadImportOrders();
@@ -23,23 +24,23 @@ const ManagerImportOrder = () => {
             ]);
             const suppliers = suppliersRes.data.data || [];
             const branches = branchesRes.data.data || [];
-
+    
             const supplierMap = suppliers.reduce((acc, supplier) => {
                 acc[supplier.supplierID] = supplier.name;
                 return acc;
             }, {});
-
+    
             const branchMap = branches.reduce((acc, branch) => {
                 acc[branch.branchID] = branch.address;
                 return acc;
             }, {});
-
+    
             const enrichedOrders = orders.map((order) => ({
                 ...order,
                 supplierName: supplierMap[order.supplierID] || "Unknown Supplier",
                 branchAddress: branchMap[order.branchID] || "Unknown Address",
             }));
-
+    
             // if status true then show "Confirmed" else "Pending"
             enrichedOrders.forEach((order) => {
                 if (order.status) {
@@ -48,23 +49,25 @@ const ManagerImportOrder = () => {
                     order.status = "Pending";
                 }
             });
-
+    
             // format date
             enrichedOrders.forEach((order) => {
                 const date = new Date(order.date);
                 order.date = date.toLocaleDateString();
             });
-
-            // console.log("Enriched orders:", enrichedOrders);
-
+    
+            // Sắp xếp theo ngày từ mới đến cũ
+            enrichedOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
             setImportOrders(enrichedOrders);
         } catch (error) {
             console.error("Error loading import orders:", error);
         }
-    };
+    };    
 
     const handleAddImportOrder = () => {
-        navigate("/manager/import-order/detail/new");
+        // Điều hướng đến trang tạo Import Order mới và truyền branchID hiện tại
+        navigate("/manager/import-order/detail/new", { state: { branchID } });
     };
 
     const handleViewEditOrder = (importOrderId) => {

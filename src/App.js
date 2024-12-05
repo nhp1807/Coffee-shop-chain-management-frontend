@@ -21,6 +21,8 @@ import AdminImportOrder from './pages/admin/AdminImportOrder';
 import AdminEmployee from './pages/admin/AdminEmployee';
 import ProductDetail from './pages/admin/ProductDetail';
 import ManagerTimesheet from './pages/manager/ManagerTimesheet';
+import ManagerStorage from './pages/manager/ManagerStorage';
+import AdminStorage from './pages/admin/AdminStorage';
 
 function App() {
   return (
@@ -38,6 +40,7 @@ function App() {
           <Route exact path="/admin/material" element={<AdminMaterial />} />
           <Route exact path="/admin/supplier" element={<AdminSupplier />} />
           <Route exact path="/admin/import-order" element={<AdminImportOrder />} />
+          <Route exact path="/admin/storage" element={<AdminStorage />} />
           <Route exact path="/admin/import-order/detail/:importOrderId" element={<AdminImportOrderDetail />} />
           <Route exact path="/admin/employee" element={<AdminEmployee />} />
           <Route exact path="/admin/account/get/:id" element={<ViewAccount />} />
@@ -47,6 +50,7 @@ function App() {
           <Route exact path="/manager/import-order" element={<ManagerImportOrder />} />
           <Route exact path="/manager/import-order/detail/:importOrderId" element={<ManagerImportOrderDetail />} />
           <Route exact path="/manager/timesheet" element={<ManagerTimesheet />} />
+          <Route exact path="/manager/storage" element={<ManagerStorage />} />
 
           <Route exact path="/viewaccount/:id" element={<ViewAccount />} />
           <Route exact path="/createaccount" element={<CreateAccount />} />

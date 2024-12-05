@@ -16,7 +16,7 @@ const AdminProduct = () => {
 
     const loadProducts = async () => {
         try {
-            const result = await axios.get(`${BASE_URL}http://localhost:8080/api/product/get/all`);
+            const result = await axios.get(`${BASE_URL}/product/get/all`);
             const products = result.data.data || [];
 
             console.log("Products:", products);

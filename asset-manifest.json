@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/Coffee-shop-chain-management-frontend/static/css/main.3f90c6b3.css",
-    "main.js": "/Coffee-shop-chain-management-frontend/static/js/main.d24e3238.js",
+    "main.css": "/Coffee-shop-chain-management-frontend/static/css/main.65984425.css",
+    "main.js": "/Coffee-shop-chain-management-frontend/static/js/main.a005b5e4.js",
     "static/js/453.baa8853e.chunk.js": "/Coffee-shop-chain-management-frontend/static/js/453.baa8853e.chunk.js",
     "static/media/bootstrap-icons.woff?": "/Coffee-shop-chain-management-frontend/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",
     "static/media/bootstrap-icons.woff2?": "/Coffee-shop-chain-management-frontend/static/media/bootstrap-icons.b7bcc075b395c14ce8c2.woff2",
     "index.html": "/Coffee-shop-chain-management-frontend/index.html",
-    "main.3f90c6b3.css.map": "/Coffee-shop-chain-management-frontend/static/css/main.3f90c6b3.css.map",
-    "main.d24e3238.js.map": "/Coffee-shop-chain-management-frontend/static/js/main.d24e3238.js.map",
+    "main.65984425.css.map": "/Coffee-shop-chain-management-frontend/static/css/main.65984425.css.map",
+    "main.a005b5e4.js.map": "/Coffee-shop-chain-management-frontend/static/js/main.a005b5e4.js.map",
     "453.baa8853e.chunk.js.map": "/Coffee-shop-chain-management-frontend/static/js/453.baa8853e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.3f90c6b3.css",
-    "static/js/main.d24e3238.js"
+    "static/css/main.65984425.css",
+    "static/js/main.a005b5e4.js"
   ]
 }

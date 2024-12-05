@@ -3,6 +3,7 @@ import axios from "axios";
 import "../../assets/styles/AdminObject.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import { useNavigate } from "react-router-dom";
+import BASE_URL from "../../config";
 
 const AdminImportOrder = () => {
     const [importOrders, setImportOrders] = useState([]);
@@ -15,11 +16,11 @@ const AdminImportOrder = () => {
 
     const loadImportOrders = async () => {
         try {
-            const result = await axios.get("http://localhost:8080/api/import-order/get/all");
+            const result = await axios.get(`${BASE_URL}/import-order/get/all`);
             const orders = result.data.data || [];
             const [suppliersRes, branchesRes] = await Promise.all([
-                axios.get("http://localhost:8080/api/supplier/get/all"),
-                axios.get("http://localhost:8080/api/branch/get/all"),
+                axios.get(`${BASE_URL}/supplier/get/all`),
+                axios.get(`${BASE_URL}/branch/get/all`),
             ]);
             const suppliers = suppliersRes.data.data || [];
             const branches = branchesRes.data.data || [];
@@ -65,13 +66,13 @@ const AdminImportOrder = () => {
         navigate("/admin/import-order/detail/new");
     };
 
-    const handleViewEditOrder = (importOrderId) => {
-        navigate(`/admin/import-order/detail/${importOrderId}`);
+    const handleViewEditOrder = (importOrderID) => {
+        navigate(`/admin/import-order/detail/${importOrderID}`);
     };
 
-    const handleConfirmOrder = async (importOrderId) => {
+    const handleConfirmOrder = async (importOrderID) => {
         try {
-            const response = await axios.post(`http://localhost:8080/api/import-order/confirm/${importOrderId}`);
+            const response = await axios.post(`${BASE_URL}/import-order/confirm/${importOrderID}`);
             if (response.status === 200) {
                 alert("Order confirmed successfully!");
                 loadImportOrders(); // Reload orders after confirming

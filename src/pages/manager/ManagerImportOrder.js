@@ -3,6 +3,7 @@ import axios from "axios";
 import "../../assets/styles/AdminObject.css";
 import ManagerSideBar from "../../components/sidebar/ManagerSideBar";
 import { useNavigate } from "react-router-dom";
+import BASE_URL from "../../config";
 
 const ManagerImportOrder = () => {
     const [importOrders, setImportOrders] = useState([]);
@@ -18,9 +19,9 @@ const ManagerImportOrder = () => {
 
     const loadImportOrders = async (branchID) => {
         try {
-            const result = await axios.get(`http://localhost:8080/api/import-order/get/branch/${branchID}`);
+            const result = await axios.get(`${BASE_URL}/import-order/get/branch/${branchID}`);
             const orders = result.data.data || [];
-            const suppliersRes = await axios.get("http://localhost:8080/api/supplier/get/all");
+            const suppliersRes = await axios.get(`${BASE_URL}/supplier/get/all`);
             const suppliers = suppliersRes.data.data || [];
 
             const supplierMap = suppliers.reduce((acc, supplier) => {

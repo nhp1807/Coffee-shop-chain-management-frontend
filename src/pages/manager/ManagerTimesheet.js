@@ -4,6 +4,7 @@ import "../../assets/styles/AdminObject.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import ManagerSideBar from "../../components/sidebar/ManagerSideBar";
+import BASE_URL from "../../config";
 
 const Timesheet = () => {
     const [timesheets, setTimesheets] = useState([]);
@@ -22,7 +23,7 @@ const Timesheet = () => {
 
     const loadTimesheets = async (branchID) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/timesheet/get/branch/${branchID}`);
+            const response = await axios.get(`${BASE_URL}/timesheet/get/branch/${branchID}`);
 
             // format date to dd/mm/yyyy HH:mm:ss
             response.data.data.forEach((timesheet) => {
@@ -38,7 +39,7 @@ const Timesheet = () => {
 
     const loadBranchInfo = async (branchID) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/branch/get/${branchID}`);
+            const response = await axios.get(`${BASE_URL}/branch/get/${branchID}`);
             setBranchAddress(response.data.data.address);
         } catch (error) {
             console.error("Failed to load branch information:", error);
@@ -47,15 +48,15 @@ const Timesheet = () => {
 
     const loadEmployees = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/api/employee/get/all");
+            const response = await axios.get(`${BASE_URL}/employee/get/all`);
             setEmployees(response.data.data);
         } catch (error) {
             console.error("Failed to load employees:", error);
         }
     };
 
-    const getEmployeeName = (employeeId) => {
-        const employee = employees.find((emp) => emp.employeeID === employeeId);
+    const getEmployeeName = (employeeID) => {
+        const employee = employees.find((emp) => emp.employeeID === employeeID);
         return employee ? employee.name : "N/A";
     };
 
@@ -64,7 +65,7 @@ const Timesheet = () => {
     };
 
     const filteredTimesheets = timesheets.filter((timesheet) => {
-        const employeeName = getEmployeeName(timesheet.employeeId).toLowerCase();
+        const employeeName = getEmployeeName(timesheet.employeeID).toLowerCase();
         return employeeName.includes(searchQuery);
     });
 
@@ -110,7 +111,7 @@ const Timesheet = () => {
                                 <td>{index + 1}</td>
                                 <td>{timesheet.date}</td>
                                 <td>{timesheet.shift}</td>
-                                <td>{getEmployeeName(timesheet.employeeId)}</td>
+                                <td>{getEmployeeName(timesheet.employeeID)}</td>
                                 <td>{branchAddress}</td>
                             </tr>
                         ))}

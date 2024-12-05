@@ -1,20 +1,20 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080/api/account";
-
-export const createAccount = async (account) => {
-    return await axios.post(`${API_BASE_URL}/create`, account);
-};
+const BASE_URL = "http://localhost:8080/api/account";
 
 export const getAllAccounts = async () => {
-    const result = await axios.get(`${API_BASE_URL}/get/all`);
-    return result.data.data;
-};
-
-export const getAccountById = async (id) => {
-    return await axios.get(`${API_BASE_URL}/get/${id}`);
+    const response = await axios.get(`${BASE_URL}/get/all`);
+    return response.data.data;
 };
 
 export const deleteAccountById = async (id) => {
-    await axios.delete(`${API_BASE_URL}/delete/${id}`);
+    await axios.delete(`${BASE_URL}/delete/${id}`);
+};
+
+export const updateAccount = async (accountID, accountData) => {
+    await axios.put(`${BASE_URL}/update/${accountID}`, accountData);
+};
+
+export const createAccount = async (accountData) => {
+    await axios.post(`${BASE_URL}/create`, accountData);
 };

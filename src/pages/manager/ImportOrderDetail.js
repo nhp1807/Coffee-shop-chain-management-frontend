@@ -4,10 +4,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import ManagerSideBar from "../../components/sidebar/ManagerSideBar"; // Sidebar
 import "../../assets/styles/AdminObject.css"; // CSS Style
 import "../../assets/styles/Suggestion.css";
-import { Modal } from "react-bootstrap"; // Để sử dụng modal
+import { Modal } from "react-bootstrap";
+import BASE_URL from "../../config";
 
 const ImportOrderDetail = () => {
-    const { importOrderId } = useParams();
+    const { importOrderID } = useParams();
     const navigate = useNavigate();
 
     const [importOrder, setImportOrder] = useState({
@@ -24,7 +25,7 @@ const ImportOrderDetail = () => {
     const [branches, setBranches] = useState([]);
     const [materials, setMaterials] = useState([]); // Dữ liệu nguyên liệu (Material)
     const [newDetail, setNewDetail] = useState({
-        materialName: "", // Đảm bảo có giá trị khởi tạo
+        name: "", // Đảm bảo có giá trị khởi tạo
         quantity: 0,
         price: 0,
         description: "",
@@ -38,7 +39,7 @@ const ImportOrderDetail = () => {
             try {
                 await loadSuppliersAndBranches();
                 await loadMaterials();
-    
+
                 // Lấy branchID từ localStorage
                 const storedBranchID = localStorage.getItem("branchID");
                 if (storedBranchID) {
@@ -47,23 +48,22 @@ const ImportOrderDetail = () => {
                         branchID: storedBranchID, // Cập nhật branchID từ localStorage
                     }));
                 }
-    
-                if (importOrderId !== "new") {
-                    await loadImportOrder(importOrderId);
+
+                if (importOrderID !== "new") {
+                    await loadImportOrder(importOrderID);
                 }
             } catch (error) {
                 console.error("Error loading data:", error);
             }
         };
         loadData();
-    }, [importOrderId]);
-
+    }, [importOrderID]);
 
     const loadSuppliersAndBranches = async () => {
         try {
             const [suppliersRes, branchesRes] = await Promise.all([
-                axios.get("http://localhost:8080/api/supplier/get/all"),
-                axios.get("http://localhost:8080/api/branch/get/all"),
+                axios.get(`${BASE_URL}/supplier/get/all`),
+                axios.get(`${BASE_URL}/branch/get/all`),
             ]);
 
             setSuppliers(suppliersRes.data.data || []);
@@ -75,7 +75,7 @@ const ImportOrderDetail = () => {
 
     const loadMaterials = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/api/material/get/all");
+            const response = await axios.get(`${BASE_URL}/material/get/all`);
             setMaterials(response.data.data || []);
         } catch (error) {
             console.error("Error loading materials:", error);
@@ -84,14 +84,14 @@ const ImportOrderDetail = () => {
 
     const loadImportOrder = async (id) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/import-order/get/${id}`);
+            const response = await axios.get(`${BASE_URL}/import-order/get/${id}`);
             const date = new Date(response.data.data.date);
             response.data.data.date = date.toLocaleDateString();
 
             // Get supplier and branch name
             const [supplierRes, branchRes] = await Promise.all([
-                axios.get(`http://localhost:8080/api/supplier/get/${response.data.data.supplierID}`),
-                axios.get(`http://localhost:8080/api/branch/get/${response.data.data.branchID}`),
+                axios.get(`${BASE_URL}/supplier/get/${response.data.data.supplierID}`),
+                axios.get(`${BASE_URL}/branch/get/${response.data.data.branchID}`),
             ]);
 
             response.data.data.supplierName = supplierRes.data.data.name;
@@ -107,46 +107,41 @@ const ImportOrderDetail = () => {
     };
 
     const handleSave = async () => {
-        try {
-            if (importOrderId === "new") {
-                await axios.post("http://localhost:8080/api/import-order/create", importOrder);
-            } else {
-                await axios.put(`http://localhost:8080/api/import-order/update/${importOrderId}`, importOrder);
-            }
-            navigate("/manager/import-order");
-        } catch (error) {
-            console.error("Error saving import order:", error);
-        }
+        navigate("/manager/import-order");
     };
 
     const addDetail = async () => {
-        if (!newDetail.materialName || !newDetail.quantity || !newDetail.price) {
+        if (!newDetail.name || !newDetail.quantity || !newDetail.price) {
             alert("Please fill in all fields before adding detail.");
             return;
         }
-
+    
         try {
-            const response = await axios.put(`http://localhost:8080/api/import-order/add/${importOrderId}`, newDetail);
-            setImportOrder((prevOrder) => ({
-                ...prevOrder,
-                detailImportOrders: [...prevOrder.detailImportOrders, response.data.data], // Thêm detail mới vào importOrder
-            }));
-            setShowModal(false); // Đóng modal
+            const response = await axios.put(`${BASE_URL}/import-order/add/${importOrderID}`, newDetail);
+            await loadImportOrder(importOrderID);
+
+            setShowModal(false);
+            setNewDetail({
+                name: "",
+                quantity: 0,
+                price: 0,
+                description: "",
+            });
         } catch (error) {
             console.error("Error adding detail:", error);
         }
     };
-
-    const handleDeleteDetail = async (materialId) => {
+    
+    const handleDeleteDetail = async (materialID) => {
         try {
 
-            await axios.delete(`http://localhost:8080/api/import-order/delete/${importOrderId}/${materialId}`);
+            await axios.delete(`${BASE_URL}/import-order/delete/${materialID}/${materialID}`);
 
             // Cập nhật lại danh sách chi tiết sau khi xóa
             setImportOrder((prevOrder) => ({
                 ...prevOrder,
                 detailImportOrders: prevOrder.detailImportOrders.filter(
-                    (detail) => detail.materialId !== materialId
+                    (detail) => detail.materialID !== materialID
                 ),
             }));
         } catch (error) {
@@ -154,25 +149,23 @@ const ImportOrderDetail = () => {
         }
     };
 
-
     const handleMaterialSearch = (e) => {
         const searchTerm = e.target.value.toLowerCase();
-        setNewDetail({ ...newDetail, materialName: e.target.value });
+        setNewDetail({ ...newDetail, name: e.target.value });
         setFilteredMaterials(
-            materials.filter((material) =>
-                material.name.toLowerCase().includes(searchTerm)
-            )
+            materials.filter((material) => material.name && material.name.toLowerCase().includes(searchTerm))
         );
     };
 
-    const handleMaterialSelect = (materialName) => {
-        if (!materialName) {
+
+    const handleMaterialSelect = (name) => {
+        if (!name) {
             console.error("Material name is required!");
             return;
         }
         setNewDetail({
             ...newDetail,
-            materialName: materialName,
+            name: name,
         });
         setFilteredMaterials([]);  // Đóng danh sách gợi ý khi đã chọn
     };
@@ -183,63 +176,43 @@ const ImportOrderDetail = () => {
             <ManagerSideBar />
             <div className="content">
                 <div className="header">
-                    <h1>{importOrderId === "new" ? "Add New Import Order" : "Edit Import Order"}</h1>
+                    <h1>{importOrderID === "new" ? "Add New Import Order" : "Edit Import Order"}</h1>
                 </div>
 
                 <div className="menu">
                     <h3>Import Order Detail</h3>
-                    <p>Home > Import Order > {importOrderId === "new" ? "New" : "Edit"}</p>
+                    <p>Home > Import Order > {importOrderID === "new" ? "New" : "Edit"}</p>
                 </div>
 
                 {/* Form Supplier and Branch */}
                 <div className="form-group">
                     <label>Supplier</label>
-                    <select
+                    <input
+                        type="text"
                         className="form-control"
-                        value={importOrder.supplierID || ""}
-                        onChange={(e) =>
-                            setImportOrder({ ...importOrder, supplierID: e.target.value })
-                        }
-                    >
-                        <option value="">-- Select Supplier --</option>
-                        {suppliers.map((supplier) => (
-                            <option key={supplier.supplierID} value={supplier.supplierID}>
-                                {supplier.name}
-                            </option>
-                        ))}
-                    </select>
+                        value={importOrder.supplierName || ""}
+                        readOnly
+                    />
                 </div>
 
                 <div className="form-group">
                     <label>Branch</label>
-                    <select
+                    <input
+                        type="text"
                         className="form-control"
-                        value={importOrder.branchID || ""}
-                        onChange={(e) =>
-                            setImportOrder({ ...importOrder, branchID: e.target.value })
-                        }
-                    >
-                        <option value="">-- Select Branch --</option>
-                        {branches.map((branch) => (
-                            <option key={branch.branchID} value={branch.branchID}>
-                                {branch.address}
-                            </option>
-                        ))}
-                    </select>
+                        value={importOrder.branchAddress || ""}
+                        readOnly
+                    />
                 </div>
 
                 <div className="form-group">
                     <label>Payment Method</label>
-                    <select
+                    <input
+                        type="text"
                         className="form-control"
-                        value={importOrder.paymentMethod}
-                        onChange={(e) =>
-                            setImportOrder({ ...importOrder, paymentMethod: e.target.value })
-                        }
-                    >
-                        <option value="cash">Cash</option>
-                        <option value="bank">Bank</option>
-                    </select>
+                        value={importOrder.paymentMethod || ""}
+                        readOnly
+                    />
                 </div>
 
                 {/* Table to display details */}
@@ -258,14 +231,14 @@ const ImportOrderDetail = () => {
                         {importOrder?.detailImportOrders?.length > 0 ? (
                             importOrder.detailImportOrders.map((detail, index) => (
                                 <tr key={index}>
-                                    <td>{detail.materialName || "Unknown Material"}</td> {/* Hiển thị giá trị mặc định nếu materialName là undefined */}
-                                    <td>{detail.quantity}</td>
-                                    <td>{detail.price}</td>
-                                    <td>{detail.description}</td>
+                                    <td>{detail?.name || "Unknown Material"}</td> {/* Kiểm tra xem detail.name có tồn tại không */}
+                                    <td>{detail?.quantity}</td>
+                                    <td>{detail?.price}</td>
+                                    <td>{detail?.description}</td>
                                     <td>
                                         <button
                                             className="action-btn"
-                                            onClick={() => handleDeleteDetail(detail.materialId)}
+                                            onClick={() => handleDeleteDetail(detail.materialID)}
                                         >
                                             Delete
                                         </button>
@@ -280,6 +253,7 @@ const ImportOrderDetail = () => {
                             </tr>
                         )}
                     </tbody>
+
                 </table>
 
                 <button className="action-btn" onClick={() => setShowModal(true)}>
@@ -300,7 +274,7 @@ const ImportOrderDetail = () => {
                             <input
                                 type="text"
                                 className="form-control"
-                                value={newDetail.materialName}
+                                value={newDetail.name}
                                 onChange={handleMaterialSearch}
                                 placeholder="Enter material name"
                             />

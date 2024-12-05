@@ -4,6 +4,7 @@ import "../../assets/styles/AdminObject.css"; // Sử dụng lại CSS của Adm
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import ManagerSideBar from "../../components/sidebar/ManagerSideBar";
+import BASE_URL from "../../config";
 
 const AdminEmployee = () => {
     const [employees, setEmployees] = useState([]);
@@ -29,7 +30,7 @@ const AdminEmployee = () => {
 
     const loadEmployees = async (branchID) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/employee/get/branch/${branchID}`);
+            const response = await axios.get(`${BASE_URL}/employee/get/branch/${branchID}`);
             const employees = response.data.data;
 
             // Format date
@@ -45,7 +46,7 @@ const AdminEmployee = () => {
     };
 
     const deleteEmployee = async (id) => {
-        await axios.delete(`http://localhost:8080/api/employee/delete/${id}`);
+        await axios.delete(`${BASE_URL}/employee/delete/${id}`);
         loadEmployees(branchID); // Load lại danh sách sau khi xóa
     };
 
@@ -69,9 +70,9 @@ const AdminEmployee = () => {
 
     const saveEmployee = async () => {
         if (isEdit && selectedEmployee) {
-            await axios.put(`http://localhost:8080/api/employee/update/${selectedEmployee.employeeID}`, selectedEmployee);
+            await axios.put(`${BASE_URL}/employee/update/${selectedEmployee.employeeID}`, selectedEmployee);
         } else {
-            await axios.post("http://localhost:8080/api/employee/create", newEmployee);
+            await axios.post(`${BASE_URL}/employee/create`, newEmployee);
         }
         loadEmployees(branchID);
     };

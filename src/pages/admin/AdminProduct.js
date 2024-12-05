@@ -3,6 +3,7 @@ import axios from "axios";
 import "../../assets/styles/AdminObject.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import { useNavigate } from "react-router-dom";
+import BASE_URL from "../../config";
 
 const AdminProduct = () => {
     const [products, setProducts] = useState([]);
@@ -15,14 +16,14 @@ const AdminProduct = () => {
 
     const loadProducts = async () => {
         try {
-            const result = await axios.get("http://localhost:8080/api/product/get/all");
+            const result = await axios.get(`${BASE_URL}http://localhost:8080/api/product/get/all`);
             const products = result.data.data || [];
 
             console.log("Products:", products);
 
             // Lấy danh sách Material và Product tương ứng
             const [materialsRes] = await Promise.all([ 
-                axios.get("http://localhost:8080/api/material/get/all"),
+                axios.get(`${BASE_URL}/material/get/all`),
             ]);
             const materials = materialsRes.data.data || [];
 
@@ -58,7 +59,7 @@ const AdminProduct = () => {
 
     const handleDeleteProduct = async (productId) => {
         try {
-            await axios.delete(`http://localhost:8080/api/product/delete/${productId}`);
+            await axios.delete(`${BASE_URL}/product/delete/${productId}`);
             // Sau khi xoá thành công, tải lại danh sách sản phẩm
             loadProducts();
         } catch (error) {

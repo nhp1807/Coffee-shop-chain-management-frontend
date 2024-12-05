@@ -2,7 +2,7 @@
   "name": "coffee-shop-chain-management-fe",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://nhp1807.github.io/Coffee-shop-chain-management-frontend",
+  "homepage": "https://nhp1807.github.io/Coffee-shop-chain-management-frontend/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -23,7 +23,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build --dest 404"
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

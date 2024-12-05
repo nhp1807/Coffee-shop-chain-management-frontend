@@ -69,3 +69,15 @@
 button {
   margin: 10px;
 }
+
+/* CSS cho logo */
+.logo-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.logo {
+  max-width: 100%; /* Giới hạn kích thước hình ảnh */
+  height: auto;
+  max-height: 100px; /* Đặt chiều cao tối đa nếu cần */
+}

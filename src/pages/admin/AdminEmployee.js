@@ -4,6 +4,7 @@ import "../../assets/styles/AdminObject.css"; // Sử dụng lại CSS của Adm
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
+import BASE_URL from "../../config";
 
 const AdminEmployee = () => {
     const [employees, setEmployees] = useState([]);
@@ -31,8 +32,8 @@ const AdminEmployee = () => {
     // };
 
     const loadEmployees = async () => {
-        const employeeResult = await axios.get("http://localhost:8080/api/employee/get/all");
-        const branchResult = await axios.get("http://localhost:8080/api/branch/get/all");
+        const employeeResult = await axios.get(`${BASE_URL}/employee/get/all`);
+        const branchResult = await axios.get(`${BASE_URL}/branch/get/all`);
         
         // Lưu danh sách branchs
         const branches = branchResult.data.data;
@@ -57,12 +58,12 @@ const AdminEmployee = () => {
     
 
     const loadbranchs = async () => {
-        const result = await axios.get("http://localhost:8080/api/branch/get/all");
+        const result = await axios.get(`${BASE_URL}/branch/get/all`);
         setbranchs(result.data.data);
     };
 
     const deleteEmployee = async (id) => {
-        await axios.delete(`http://localhost:8080/api/employee/delete/${id}`);
+        await axios.delete(`${BASE_URL}/employee/delete/${id}`);
         loadEmployees();
     };
 
@@ -86,9 +87,9 @@ const AdminEmployee = () => {
 
     const saveEmployee = async () => {
         if (isEdit && selectedEmployee) {
-            await axios.put(`http://localhost:8080/api/employee/update/${selectedEmployee.employeeID}`, selectedEmployee);
+            await axios.put(`${BASE_URL}/employee/update/${selectedEmployee.employeeID}`, selectedEmployee);
         } else {
-            await axios.post("http://localhost:8080/api/employee/create", newEmployee);
+            await axios.post(`${BASE_URL}/employee/create`, newEmployee);
         }
         loadEmployees();
     };

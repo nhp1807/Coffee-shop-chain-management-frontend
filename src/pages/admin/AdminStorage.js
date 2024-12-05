@@ -3,12 +3,15 @@ import axios from "axios";
 import "../../assets/styles/AdminObject.css"; // Sử dụng lại CSS từ AdminObject
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import ManagerSideBar from "../../components/sidebar/ManagerSideBar";
+import AdminSideBar from "../../components/sidebar/AdminSideBar";
+import { useNavigate } from "react-router-dom";
+import BASE_URL from "../../config";
 
 const AdminStorage = () => {
     const [storages, setStorages] = useState([]);
     const [branches, setBranches] = useState([]); // Danh sách tất cả các branch
     const [searchAddress, setSearchAddress] = useState(""); // Tìm kiếm theo địa chỉ
+    const navigate = useNavigate();
 
     useEffect(() => {
         loadBranches();
@@ -17,7 +20,7 @@ const AdminStorage = () => {
 
     const loadBranches = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/api/branch/get/all");
+            const response = await axios.get(`${BASE_URL}/branch/get/all`);
             setBranches(response.data.data); // Lưu danh sách các branch
         } catch (error) {
             console.error("Failed to load branches:", error);
@@ -26,13 +29,13 @@ const AdminStorage = () => {
 
     const loadStorages = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/api/storage/get/all");
+            const response = await axios.get(`${BASE_URL}/storage/get/all`);
             const storages = response.data.data;
 
             // Lấy thêm thông tin Material cho mỗi storage
             const updatedStorages = await Promise.all(
                 storages.map(async (storage) => {
-                    const materialResponse = await axios.get(`http://localhost:8080/api/material/get/${storage.materialID}`);
+                    const materialResponse = await axios.get(`${BASE_URL}/material/get/${storage.materialID}`);
                     return { ...storage, materialName: materialResponse.data.data.name };
                 })
             );
@@ -44,7 +47,7 @@ const AdminStorage = () => {
     };
 
     const handleOrder = () => {
-        window.location.href = "/admin/import-order"; // Điều hướng tới trang Import Order
+        navigate("/admin/import-order"); // Điều hướng tới trang Import Order
     };
 
     // Lọc các storage theo từ khóa tìm kiếm địa chỉ branch
@@ -58,7 +61,7 @@ const AdminStorage = () => {
 
     return (
         <div className="admin-page">
-            <ManagerSideBar />
+            <AdminSideBar />
 
             <div className="content">
                 <div className="header">

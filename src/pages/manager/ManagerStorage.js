@@ -4,11 +4,14 @@ import "../../assets/styles/AdminObject.css"; // Sử dụng lại CSS từ Admi
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import ManagerSideBar from "../../components/sidebar/ManagerSideBar";
+import { useNavigate } from "react-router-dom";
+import BASE_URL from "../../config";
 
 const ManagerStorage = () => {
     const [storages, setStorages] = useState([]);
     const branchID = localStorage.getItem("branchID"); // Lấy branchID từ localStorage
     const [branchAddress, setBranchAddress] = useState(""); // Địa chỉ chi nhánh
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (branchID) {
@@ -19,7 +22,7 @@ const ManagerStorage = () => {
 
     const loadBranchAddress = async (branchID) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/branch/get/${branchID}`);
+            const response = await axios.get(`${BASE_URL}/branch/get/${branchID}`);
 
             setBranchAddress(response.data.data.address);
         } catch (error) {
@@ -29,13 +32,13 @@ const ManagerStorage = () => {
 
     const loadStorages = async (branchID) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/storage/get/branch/${branchID}`);
+            const response = await axios.get(`${BASE_URL}/storage/get/branch/${branchID}`);
             const storages = response.data.data;
 
             // Lấy thêm thông tin Material cho mỗi storage
             const updatedStorages = await Promise.all(
                 storages.map(async (storage) => {
-                    const materialResponse = await axios.get(`http://localhost:8080/api/material/get/${storage.materialID}`);
+                    const materialResponse = await axios.get(`${BASE_URL}/material/get/${storage.materialID}`);
                     return { ...storage, materialName: materialResponse.data.data.name };
                 })
             );
@@ -49,7 +52,7 @@ const ManagerStorage = () => {
     };
 
     const handleOrder = () => {
-        window.location.href = "/admin/import-order"; // Điều hướng tới trang Import Order
+        navigate("/manager/import-order"); // Điều hướng tới trang Import Order
     };
 
     return (

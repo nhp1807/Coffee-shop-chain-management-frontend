@@ -3,7 +3,9 @@ import axios from "axios";
 import "../../assets/styles/AdminObject.css"; // Sử dụng lại CSS của AdminProduct
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
+import BASE_URL from "../../config";
 
 const AdminSupplier = () => {
     const [suppliers, setSuppliers] = useState([]);
@@ -17,12 +19,12 @@ const AdminSupplier = () => {
     }, []);
 
     const loadSuppliers = async () => {
-        const result = await axios.get("http://localhost:8080/api/supplier/get/all");
+        const result = await axios.get(`${BASE_URL}/supplier/get/all`);
         setSuppliers(result.data.data);
     };
 
     const deleteSupplier = async (id) => {
-        await axios.delete(`http://localhost:8080/api/supplier/delete/${id}`);
+        await axios.delete(`${BASE_URL}/supplier/delete/${id}`);
         loadSuppliers();
     };
 
@@ -39,9 +41,9 @@ const AdminSupplier = () => {
 
     const saveSupplier = async () => {
         if (isEdit && selectedSupplier) {
-            await axios.put(`http://localhost:8080/api/supplier/update/${selectedSupplier.supplierID}`, selectedSupplier);
+            await axios.put(`${BASE_URL}/supplier/update/${selectedSupplier.supplierID}`, selectedSupplier);
         } else {
-            await axios.post("http://localhost:8080/api/supplier/create", newSupplier);
+            await axios.post(`${BASE_URL}/supplier/create`, newSupplier);
         }
         loadSuppliers();
     };

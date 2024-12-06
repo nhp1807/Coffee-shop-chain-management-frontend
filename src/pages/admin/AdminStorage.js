@@ -20,7 +20,7 @@ const AdminStorage = () => {
 
     const loadBranches = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/branch/get/all`);
+            const response = await axios.get(`${BASE_URL}/api/branch/get/all`);
             setBranches(response.data.data); // Lưu danh sách các branch
         } catch (error) {
             console.error("Failed to load branches:", error);
@@ -29,13 +29,13 @@ const AdminStorage = () => {
 
     const loadStorages = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/storage/get/all`);
+            const response = await axios.get(`${BASE_URL}/api/storage/get/all`);
             const storages = response.data.data;
 
             // Lấy thêm thông tin Material cho mỗi storage
             const updatedStorages = await Promise.all(
                 storages.map(async (storage) => {
-                    const materialResponse = await axios.get(`${BASE_URL}/material/get/${storage.materialID}`);
+                    const materialResponse = await axios.get(`${BASE_URL}/api/material/get/${storage.materialID}`);
                     return { ...storage, materialName: materialResponse.data.data.name };
                 })
             );

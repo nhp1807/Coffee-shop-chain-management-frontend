@@ -21,7 +21,7 @@ const AdminAccount = () => {
     }, []);
 
     const loadAccounts = async () => {
-        const result = await axios.get(`${BASE_URL}/account/get/all`);
+        const result = await axios.get(`${BASE_URL}/api/account/get/all`);
         const accountsData = result.data.data;
     
         // Lấy address cho từng branchID
@@ -37,18 +37,18 @@ const AdminAccount = () => {
     
 
     const loadBranches = async () => {
-        const result = await axios.get(`${BASE_URL}/branch/get/all`);
+        const result = await axios.get(`${BASE_URL}/api/branch/get/all`);
         console.log("Result:" + result.data.data);
         setBranches(result.data.data);
     };
 
     const loadBranchName = async (branchID) => {
-        const result = await axios.get(`${BASE_URL}/branch/get/${branchID}`);
+        const result = await axios.get(`${BASE_URL}/api/branch/get/${branchID}`);
         return result.data.data.address;
     };
 
     const deleteAccount = async (id) => {
-        await axios.delete(`${BASE_URL}/account/delete/${id}`);
+        await axios.delete(`${BASE_URL}/api/account/delete/${id}`);
         loadAccounts();
     };
 
@@ -65,9 +65,9 @@ const AdminAccount = () => {
 
     const saveAccount = async () => {
         if (isEdit && selectedAccount) {
-            await axios.put(`${BASE_URL}/account/update/${selectedAccount.accountID}`, selectedAccount);
+            await axios.put(`${BASE_URL}/api/account/update/${selectedAccount.accountID}`, selectedAccount);
         } else {
-            await axios.post("${BASE_URL}/account/create", newAccount);
+            await axios.post("${BASE_URL}/api/account/create", newAccount);
         }
         loadAccounts();
     };

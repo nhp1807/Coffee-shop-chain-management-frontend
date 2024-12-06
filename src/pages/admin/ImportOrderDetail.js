@@ -52,8 +52,8 @@ const ImportOrderDetail = () => {
     const loadSuppliersAndBranches = async () => {
         try {
             const [suppliersRes, branchesRes] = await Promise.all([
-                axios.get(`${BASE_URL}/supplier/get/all`),
-                axios.get(`${BASE_URL}/branch/get/all`),
+                axios.get(`${BASE_URL}/api/supplier/get/all`),
+                axios.get(`${BASE_URL}/api/branch/get/all`),
             ]);
 
             setSuppliers(suppliersRes.data.data || []);
@@ -65,7 +65,7 @@ const ImportOrderDetail = () => {
 
     const loadMaterials = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/material/get/all`);
+            const response = await axios.get(`${BASE_URL}/api/material/get/all`);
             setMaterials(response.data.data || []);
         } catch (error) {
             console.error("Error loading materials:", error);
@@ -74,14 +74,14 @@ const ImportOrderDetail = () => {
 
     const loadImportOrder = async (id) => {
         try {
-            const response = await axios.get(`${BASE_URL}/import-order/get/${id}`);
+            const response = await axios.get(`${BASE_URL}/api/import-order/get/${id}`);
             const date = new Date(response.data.data.date);
             response.data.data.date = date.toLocaleDateString();
 
             // Get supplier and branch name
             const [supplierRes, branchRes] = await Promise.all([
-                axios.get(`${BASE_URL}/supplier/get/${response.data.data.supplierID}`),
-                axios.get(`${BASE_URL}/branch/get/${response.data.data.branchID}`),
+                axios.get(`${BASE_URL}/api/supplier/get/${response.data.data.supplierID}`),
+                axios.get(`${BASE_URL}/api/branch/get/${response.data.data.branchID}`),
             ]);
 
             response.data.data.supplierName = supplierRes.data.data.name;
@@ -99,9 +99,9 @@ const ImportOrderDetail = () => {
     const handleSave = async () => {
         try {
             if (importOrderID === "new") {
-                await axios.post(`${BASE_URL}/import-order/create`, importOrder);
+                await axios.post(`${BASE_URL}/api/import-order/create`, importOrder);
             } else {
-                await axios.put(`${BASE_URL}/import-order/update/${importOrderID}`, importOrder);
+                await axios.put(`${BASE_URL}/api/import-order/update/${importOrderID}`, importOrder);
             }
             navigate("/admin/import-order");
         } catch (error) {
@@ -116,7 +116,7 @@ const ImportOrderDetail = () => {
         }
     
         try {
-            const response = await axios.put(`${BASE_URL}/import-order/add/${importOrderID}`, newDetail);
+            const response = await axios.put(`${BASE_URL}/api/import-order/add/${importOrderID}`, newDetail);
             await loadImportOrder(importOrderID);
 
             setShowModal(false);
@@ -134,7 +134,7 @@ const ImportOrderDetail = () => {
     const handleDeleteDetail = async (materialID) => {
         try {
 
-            await axios.delete(`${BASE_URL}/import-order/delete/${importOrderID}/${materialID}`);
+            await axios.delete(`${BASE_URL}/api/import-order/delete/${importOrderID}/${materialID}`);
 
             // Cập nhật lại danh sách chi tiết sau khi xóa
             setImportOrder((prevOrder) => ({

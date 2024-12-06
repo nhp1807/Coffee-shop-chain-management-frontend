@@ -23,7 +23,7 @@ const Timesheet = () => {
 
     const loadTimesheets = async (branchID) => {
         try {
-            const response = await axios.get(`${BASE_URL}/timesheet/get/branch/${branchID}`);
+            const response = await axios.get(`${BASE_URL}/api/timesheet/get/branch/${branchID}`);
 
             // format date to dd/mm/yyyy HH:mm:ss
             response.data.data.forEach((timesheet) => {
@@ -39,7 +39,7 @@ const Timesheet = () => {
 
     const loadBranchInfo = async (branchID) => {
         try {
-            const response = await axios.get(`${BASE_URL}/branch/get/${branchID}`);
+            const response = await axios.get(`${BASE_URL}/api/branch/get/${branchID}`);
             setBranchAddress(response.data.data.address);
         } catch (error) {
             console.error("Failed to load branch information:", error);
@@ -48,7 +48,7 @@ const Timesheet = () => {
 
     const loadEmployees = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/employee/get/all`);
+            const response = await axios.get(`${BASE_URL}/api/employee/get/all`);
             setEmployees(response.data.data);
         } catch (error) {
             console.error("Failed to load employees:", error);

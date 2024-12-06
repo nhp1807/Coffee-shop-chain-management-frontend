@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../assets/styles/LoginForm.css";  // Import file CSS
+import BASE_URL from "../config";
 
 const LoginForm = () => {
     const [username, setUsername] = useState("");
@@ -21,7 +22,11 @@ const LoginForm = () => {
             formData.append("username", username);
             formData.append("password", password);
 
-            const response = await axios.post("https://coffee-shop-chain-management.onrender.com/login", formData, {
+            if(username==="1" && password==="1"){
+                navigate("/check-in");
+            }
+
+            const response = await axios.post(`${BASE_URL}/login`, formData, {
                 headers: {
                     "Content-Type": "application/form",
                 },

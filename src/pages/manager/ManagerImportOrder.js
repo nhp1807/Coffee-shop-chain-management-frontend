@@ -19,9 +19,9 @@ const ManagerImportOrder = () => {
 
     const loadImportOrders = async (branchID) => {
         try {
-            const result = await axios.get(`${BASE_URL}/import-order/get/branch/${branchID}`);
+            const result = await axios.get(`${BASE_URL}/api/import-order/get/branch/${branchID}`);
             const orders = result.data.data || [];
-            const suppliersRes = await axios.get(`${BASE_URL}/supplier/get/all`);
+            const suppliersRes = await axios.get(`${BASE_URL}/api/supplier/get/all`);
             const suppliers = suppliersRes.data.data || [];
 
             const supplierMap = suppliers.reduce((acc, supplier) => {

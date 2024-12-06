@@ -32,8 +32,8 @@ const AdminEmployee = () => {
     // };
 
     const loadEmployees = async () => {
-        const employeeResult = await axios.get(`${BASE_URL}/employee/get/all`);
-        const branchResult = await axios.get(`${BASE_URL}/branch/get/all`);
+        const employeeResult = await axios.get(`${BASE_URL}/api/employee/get/all`);
+        const branchResult = await axios.get(`${BASE_URL}/api/branch/get/all`);
         
         // Lưu danh sách branchs
         const branches = branchResult.data.data;
@@ -58,12 +58,12 @@ const AdminEmployee = () => {
     
 
     const loadbranchs = async () => {
-        const result = await axios.get(`${BASE_URL}/branch/get/all`);
+        const result = await axios.get(`${BASE_URL}/api/branch/get/all`);
         setbranchs(result.data.data);
     };
 
     const deleteEmployee = async (id) => {
-        await axios.delete(`${BASE_URL}/employee/delete/${id}`);
+        await axios.delete(`${BASE_URL}/api/employee/delete/${id}`);
         loadEmployees();
     };
 
@@ -87,9 +87,9 @@ const AdminEmployee = () => {
 
     const saveEmployee = async () => {
         if (isEdit && selectedEmployee) {
-            await axios.put(`${BASE_URL}/employee/update/${selectedEmployee.employeeID}`, selectedEmployee);
+            await axios.put(`${BASE_URL}/api/employee/update/${selectedEmployee.employeeID}`, selectedEmployee);
         } else {
-            await axios.post(`${BASE_URL}/employee/create`, newEmployee);
+            await axios.post(`${BASE_URL}/api/employee/create`, newEmployee);
         }
         loadEmployees();
     };

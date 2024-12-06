@@ -16,11 +16,11 @@ const AdminImportOrder = () => {
 
     const loadImportOrders = async () => {
         try {
-            const result = await axios.get(`${BASE_URL}/import-order/get/all`);
+            const result = await axios.get(`${BASE_URL}/api/import-order/get/all`);
             const orders = result.data.data || [];
             const [suppliersRes, branchesRes] = await Promise.all([
-                axios.get(`${BASE_URL}/supplier/get/all`),
-                axios.get(`${BASE_URL}/branch/get/all`),
+                axios.get(`${BASE_URL}/api/supplier/get/all`),
+                axios.get(`${BASE_URL}/api/branch/get/all`),
             ]);
             const suppliers = suppliersRes.data.data || [];
             const branches = branchesRes.data.data || [];
@@ -72,7 +72,7 @@ const AdminImportOrder = () => {
 
     const handleConfirmOrder = async (importOrderID) => {
         try {
-            const response = await axios.post(`${BASE_URL}/import-order/confirm/${importOrderID}`);
+            const response = await axios.post(`${BASE_URL}/api/import-order/confirm/${importOrderID}`);
             if (response.status === 200) {
                 alert("Order confirmed successfully!");
                 loadImportOrders(); // Reload orders after confirming

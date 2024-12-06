@@ -19,12 +19,12 @@ const AdminSupplier = () => {
     }, []);
 
     const loadSuppliers = async () => {
-        const result = await axios.get(`${BASE_URL}/supplier/get/all`);
+        const result = await axios.get(`${BASE_URL}/api/supplier/get/all`);
         setSuppliers(result.data.data);
     };
 
     const deleteSupplier = async (id) => {
-        await axios.delete(`${BASE_URL}/supplier/delete/${id}`);
+        await axios.delete(`${BASE_URL}/api/supplier/delete/${id}`);
         loadSuppliers();
     };
 
@@ -41,9 +41,9 @@ const AdminSupplier = () => {
 
     const saveSupplier = async () => {
         if (isEdit && selectedSupplier) {
-            await axios.put(`${BASE_URL}/supplier/update/${selectedSupplier.supplierID}`, selectedSupplier);
+            await axios.put(`${BASE_URL}/api/supplier/update/${selectedSupplier.supplierID}`, selectedSupplier);
         } else {
-            await axios.post(`${BASE_URL}/supplier/create`, newSupplier);
+            await axios.post(`${BASE_URL}/api/supplier/create`, newSupplier);
         }
         loadSuppliers();
     };

@@ -30,11 +30,11 @@ const ProductDetail = () => {
         const loadProductData = async () => {
             try {
                 // Fetch product details
-                const response = await axios.get(`${BASE_URL}/product/get/${productID}`);
+                const response = await axios.get(`${BASE_URL}/api/product/get/${productID}`);
                 setProduct(response.data.data);
 
                 // Fetch material list
-                const materialsRes = await axios.get(`${BASE_URL}/material/get/all`);
+                const materialsRes = await axios.get(`${BASE_URL}/api/material/get/all`);
                 setMaterials(materialsRes.data.data || []);
             } catch (error) {
                 console.error("Error loading product or materials:", error);
@@ -48,9 +48,9 @@ const ProductDetail = () => {
     const handleSave = async () => {
         try {
             if (productID === "new") {
-                await axios.post(`${BASE_URL}/product/create`, product);
+                await axios.post(`${BASE_URL}/api/product/create`, product);
             } else {
-                await axios.put(`${BASE_URL}/product/update/${productID}`, product);
+                await axios.put(`${BASE_URL}/api/product/update/${productID}`, product);
             }
             navigate("/admin/product");
         } catch (error) {
@@ -67,10 +67,10 @@ const ProductDetail = () => {
     
         try {
             // Gửi yêu cầu thêm vật liệu vào sản phẩm
-            const response = await axios.put(`${BASE_URL}/product/add-material/${productID}`, newProductMaterial);
+            const response = await axios.put(`${BASE_URL}/api/product/add-material/${productID}`, newProductMaterial);
     
             // Sau khi thêm, gọi lại API để lấy dữ liệu cập nhật của sản phẩm
-            const updatedProductResponse = await axios.get(`${BASE_URL}/product/get/${productID}`);
+            const updatedProductResponse = await axios.get(`${BASE_URL}/api/product/get/${productID}`);
             setProduct(updatedProductResponse.data.data);  // Cập nhật lại sản phẩm với danh sách vật liệu mới
     
             setShowModal(false); // Đóng modal
@@ -81,7 +81,7 @@ const ProductDetail = () => {
     
     const handleDeleteMaterial = async (materialID) => {
         try {
-            await axios.delete(`${BASE_URL}/product/delete-material/${productID}/${materialID}`);
+            await axios.delete(`${BASE_URL}/api/product/delete-material/${productID}/${materialID}`);
             setProduct((prevProduct) => ({
                 ...prevProduct,
                 productMaterials: prevProduct.productMaterials.filter((material) => material.materialID !== materialID),

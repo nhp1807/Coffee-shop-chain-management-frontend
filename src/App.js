@@ -22,6 +22,7 @@ import ProductDetail from './pages/admin/ProductDetail';
 import ManagerTimesheet from './pages/manager/ManagerTimesheet';
 import ManagerStorage from './pages/manager/ManagerStorage';
 import AdminStorage from './pages/admin/AdminStorage';
+import Timesheet from './pages/Timesheet';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
       <Router>
         <Routes>
           {/* Public Routes */}
+          <Route path="/check-in" element={<Timesheet />} />
           <Route path="/" element={<LoginForm />} />
           <Route path="/login" element={<LoginForm />} />
           

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../App.css';
-import BASE_URL from '../config';
+import '../../App.css';
+import BASE_URL from '../../config';
+import CheckResponse from '../../api/CheckResponse';
 
 const Timesheet = () => {
   const [shift, setShift] = useState('');
@@ -26,20 +27,9 @@ const Timesheet = () => {
         },
       });
 
-      const responseData = response.data;
-      if (responseData.status) {
-        alert(`Check-in thành công! \nTimesheet ID: ${responseData.data.timesheetID}`);
-        console.log('Response:', responseData);
-        // Reset form
-        setShift('');
-        setEmployeeID('');
-      } else {
-        alert(`Check in thất bại: ${responseData.message}`);
-        console.error('Error Response:', responseData);
-        // Reset form
-        setShift('');
-        setEmployeeID('');
-      }
+      CheckResponse(response);
+      setShift('');
+      setEmployeeID('');
     } catch (error) {
       console.error('Error during check-in:', error);
       alert('Có lỗi xảy ra khi kết nối đến server!');

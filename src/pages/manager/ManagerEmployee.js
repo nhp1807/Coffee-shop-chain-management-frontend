@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import ManagerSideBar from "../../components/sidebar/ManagerSideBar";
 import BASE_URL from "../../config";
+import CheckResponse from "../../api/CheckResponse";
 
 const AdminEmployee = () => {
     const [employees, setEmployees] = useState([]);
@@ -46,7 +47,8 @@ const AdminEmployee = () => {
     };
 
     const deleteEmployee = async (id) => {
-        await axios.delete(`${BASE_URL}/api/employee/delete/${id}`);
+        const response = await axios.delete(`${BASE_URL}/api/employee/delete/${id}`);
+        CheckResponse(response);
         loadEmployees(branchID); // Load lại danh sách sau khi xóa
     };
 
@@ -69,11 +71,13 @@ const AdminEmployee = () => {
     };
 
     const saveEmployee = async () => {
+        var response;
         if (isEdit && selectedEmployee) {
-            await axios.put(`${BASE_URL}/api/employee/update/${selectedEmployee.employeeID}`, selectedEmployee);
+            response = await axios.put(`${BASE_URL}/api/employee/update/${selectedEmployee.employeeID}`, selectedEmployee);
         } else {
-            await axios.post(`${BASE_URL}/api/employee/create`, newEmployee);
+            response = await axios.post(`${BASE_URL}/api/employee/create`, newEmployee);
         }
+        CheckResponse(response);
         loadEmployees(branchID);
     };
 

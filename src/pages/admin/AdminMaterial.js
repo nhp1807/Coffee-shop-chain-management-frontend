@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import BASE_URL from "../../config";
+import CheckResponse from "../../api/CheckResponse";
 
 const AdminMaterial = () => {
     const [materials, setMaterials] = useState([]); // Danh sách material
@@ -25,7 +26,8 @@ const AdminMaterial = () => {
 
     // Xóa material
     const deleteMaterial = async (id) => {
-        await axios.delete(`${BASE_URL}/api/material/delete/${id}`);
+        const respone = await axios.delete(`${BASE_URL}/api/material/delete/${id}`);
+        CheckResponse(respone);
         loadMaterials(); // Tải lại danh sách sau khi xóa
     };
 
@@ -44,13 +46,13 @@ const AdminMaterial = () => {
 
     // Lưu material (thêm mới hoặc chỉnh sửa)
     const saveMaterial = async () => {
+        var respone;
         if (isEdit && selectedMaterial) {
-            // Cập nhật material
-            await axios.put(`${BASE_URL}/api/material/update/${selectedMaterial.materialID}`, selectedMaterial);
+            respone = await axios.put(`${BASE_URL}/api/material/update/${selectedMaterial.materialID}`, selectedMaterial);
         } else {
-            // Thêm mới material
-            await axios.post(`${BASE_URL}/api/material/create`, newMaterial);
+            respone = await axios.post(`${BASE_URL}/api/material/create`, newMaterial);
         }
+        CheckResponse(respone);
         loadMaterials(); // Tải lại danh sách
     };
 

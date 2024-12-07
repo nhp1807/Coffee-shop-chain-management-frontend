@@ -6,6 +6,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import BASE_URL from "../../config";
+import CheckResponse from "../../api/CheckResponse";
 
 const AdminSupplier = () => {
     const [suppliers, setSuppliers] = useState([]);
@@ -24,7 +25,8 @@ const AdminSupplier = () => {
     };
 
     const deleteSupplier = async (id) => {
-        await axios.delete(`${BASE_URL}/api/supplier/delete/${id}`);
+        const respone = await axios.delete(`${BASE_URL}/api/supplier/delete/${id}`);
+        CheckResponse(respone);
         loadSuppliers();
     };
 
@@ -40,11 +42,13 @@ const AdminSupplier = () => {
     };
 
     const saveSupplier = async () => {
+        var respone;
         if (isEdit && selectedSupplier) {
-            await axios.put(`${BASE_URL}/api/supplier/update/${selectedSupplier.supplierID}`, selectedSupplier);
+            respone = await axios.put(`${BASE_URL}/api/supplier/update/${selectedSupplier.supplierID}`, selectedSupplier);
         } else {
-            await axios.post(`${BASE_URL}/api/supplier/create`, newSupplier);
+            respone = await axios.post(`${BASE_URL}/api/supplier/create`, newSupplier);
         }
+        CheckResponse(respone);
         loadSuppliers();
     };
 

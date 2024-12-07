@@ -5,6 +5,7 @@ import AdminSideBar from "../../components/sidebar/AdminSideBar"; // Sidebar
 import "../../assets/styles/AdminObject.css"; // CSS Style
 import { Modal } from "react-bootstrap";
 import BASE_URL from "../../config";
+import CheckResponse from "../../api/CheckResponse";
 
 const ProductDetail = () => {
     const { productID } = useParams(); // To fetch the product ID from the URL
@@ -46,13 +47,15 @@ const ProductDetail = () => {
     }, [productID]);
 
     const handleSave = async () => {
+        var reponse;
         try {
             if (productID === "new") {
-                await axios.post(`${BASE_URL}/api/product/create`, product);
+                reponse = await axios.post(`${BASE_URL}/api/product/create`, product);
             } else {
-                await axios.put(`${BASE_URL}/api/product/update/${productID}`, product);
+                reponse = await axios.put(`${BASE_URL}/api/product/update/${productID}`, product);
             }
             navigate("/admin/product");
+            CheckResponse(reponse);
         } catch (error) {
             console.error("Error saving product:", error);
         }
@@ -68,7 +71,7 @@ const ProductDetail = () => {
         try {
             // Gửi yêu cầu thêm vật liệu vào sản phẩm
             const response = await axios.put(`${BASE_URL}/api/product/add-material/${productID}`, newProductMaterial);
-    
+            CheckResponse(response);
             // Sau khi thêm, gọi lại API để lấy dữ liệu cập nhật của sản phẩm
             const updatedProductResponse = await axios.get(`${BASE_URL}/api/product/get/${productID}`);
             setProduct(updatedProductResponse.data.data);  // Cập nhật lại sản phẩm với danh sách vật liệu mới
@@ -81,7 +84,8 @@ const ProductDetail = () => {
     
     const handleDeleteMaterial = async (materialID) => {
         try {
-            await axios.delete(`${BASE_URL}/api/product/delete-material/${productID}/${materialID}`);
+            const response = await axios.delete(`${BASE_URL}/api/product/delete-material/${productID}/${materialID}`);
+            CheckResponse(response);
             setProduct((prevProduct) => ({
                 ...prevProduct,
                 productMaterials: prevProduct.productMaterials.filter((material) => material.materialID !== materialID),

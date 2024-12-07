@@ -4,6 +4,7 @@ import "../../assets/styles/AdminObject.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import { useNavigate } from "react-router-dom";
 import BASE_URL from "../../config";
+import CheckResponse from "../../api/CheckResponse";
 
 const AdminImportOrder = () => {
     const [importOrders, setImportOrders] = useState([]);
@@ -73,12 +74,8 @@ const AdminImportOrder = () => {
     const handleConfirmOrder = async (importOrderID) => {
         try {
             const response = await axios.post(`${BASE_URL}/api/import-order/confirm/${importOrderID}`);
-            if (response.status === 200) {
-                alert("Order confirmed successfully!");
-                loadImportOrders(); // Reload orders after confirming
-            } else {
-                alert("Failed to confirm order.");
-            }
+            CheckResponse(response);
+            loadImportOrders();
         } catch (error) {
             console.error("Error confirming order:", error);
             alert("An error occurred while confirming the order.");

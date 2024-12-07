@@ -6,6 +6,7 @@ import "../../assets/styles/AdminObject.css"; // CSS Style
 import "../../assets/styles/Suggestion.css";
 import { Modal } from "react-bootstrap";
 import BASE_URL from "../../config";
+import CheckResponse from "../../api/CheckResponse";
 
 const ImportOrderDetail = () => {
     const { importOrderID } = useParams();
@@ -97,13 +98,15 @@ const ImportOrderDetail = () => {
     };
 
     const handleSave = async () => {
+        var response;
         try {
             if (importOrderID === "new") {
-                await axios.post(`${BASE_URL}/api/import-order/create`, importOrder);
+                response = await axios.post(`${BASE_URL}/api/import-order/create`, importOrder);
             } else {
-                await axios.put(`${BASE_URL}/api/import-order/update/${importOrderID}`, importOrder);
+                response = await axios.put(`${BASE_URL}/api/import-order/update/${importOrderID}`, importOrder);
             }
             navigate("/admin/import-order");
+            CheckResponse(response);
         } catch (error) {
             console.error("Error saving import order:", error);
         }
@@ -117,6 +120,7 @@ const ImportOrderDetail = () => {
     
         try {
             const response = await axios.put(`${BASE_URL}/api/import-order/add/${importOrderID}`, newDetail);
+            CheckResponse(response);
             await loadImportOrder(importOrderID);
 
             setShowModal(false);
@@ -134,7 +138,8 @@ const ImportOrderDetail = () => {
     const handleDeleteDetail = async (materialID) => {
         try {
 
-            await axios.delete(`${BASE_URL}/api/import-order/delete/${importOrderID}/${materialID}`);
+            const response = await axios.delete(`${BASE_URL}/api/import-order/delete/${importOrderID}/${materialID}`);
+            CheckResponse(response);
 
             // Cập nhật lại danh sách chi tiết sau khi xóa
             setImportOrder((prevOrder) => ({

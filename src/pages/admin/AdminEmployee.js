@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import BASE_URL from "../../config";
+import CheckResponse from "../../api/CheckResponse";
 
 const AdminEmployee = () => {
     const [employees, setEmployees] = useState([]);
@@ -25,11 +26,6 @@ const AdminEmployee = () => {
         loadEmployees();
         loadbranchs(); 
     }, []);
-
-    // const loadEmployees = async () => {
-    //     const result = await axios.get("http://localhost:8080/api/employee/get/all");
-    //     setEmployees(result.data.data);
-    // };
 
     const loadEmployees = async () => {
         const employeeResult = await axios.get(`${BASE_URL}/api/employee/get/all`);
@@ -63,7 +59,8 @@ const AdminEmployee = () => {
     };
 
     const deleteEmployee = async (id) => {
-        await axios.delete(`${BASE_URL}/api/employee/delete/${id}`);
+        const respone = await axios.delete(`${BASE_URL}/api/employee/delete/${id}`);
+        CheckResponse(respone);
         loadEmployees();
     };
 
@@ -86,11 +83,13 @@ const AdminEmployee = () => {
     };
 
     const saveEmployee = async () => {
+        var respone;
         if (isEdit && selectedEmployee) {
-            await axios.put(`${BASE_URL}/api/employee/update/${selectedEmployee.employeeID}`, selectedEmployee);
+            respone = await axios.put(`${BASE_URL}/api/employee/update/${selectedEmployee.employeeID}`, selectedEmployee);
         } else {
-            await axios.post(`${BASE_URL}/api/employee/create`, newEmployee);
+            respone = await axios.post(`${BASE_URL}/api/employee/create`, newEmployee);
         }
+        CheckResponse(respone);
         loadEmployees();
     };
 

@@ -4,6 +4,7 @@ import "../../assets/styles/AdminObject.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import { useNavigate } from "react-router-dom";
 import BASE_URL from "../../config";
+import CheckResponse from "../../api/CheckResponse";
 
 const AdminProduct = () => {
     const [products, setProducts] = useState([]);
@@ -59,8 +60,8 @@ const AdminProduct = () => {
 
     const handleDeleteProduct = async (productId) => {
         try {
-            await axios.delete(`${BASE_URL}/api/product/delete/${productId}`);
-            // Sau khi xoá thành công, tải lại danh sách sản phẩm
+            const reponse = await axios.delete(`${BASE_URL}/api/product/delete/${productId}`);
+            CheckResponse(reponse);
             loadProducts();
         } catch (error) {
             console.error("Error deleting product:", error);

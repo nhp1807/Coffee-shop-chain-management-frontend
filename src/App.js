@@ -22,7 +22,7 @@ import ProductDetail from './pages/admin/ProductDetail';
 import ManagerTimesheet from './pages/manager/ManagerTimesheet';
 import ManagerStorage from './pages/manager/ManagerStorage';
 import AdminStorage from './pages/admin/AdminStorage';
-import Timesheet from './pages/Timesheet';
+import Timesheet from './pages/employee/Timesheet';
 
 function App() {
   return (

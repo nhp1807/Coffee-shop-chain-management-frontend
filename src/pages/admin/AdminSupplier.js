@@ -152,6 +152,26 @@ const AdminSupplier = () => {
                                     type="text"
                                     className="form-control"
                                     value={selectedSupplier ? selectedSupplier.address : newSupplier.address}
+                                    onChange={(e) =>
+                                        selectedSupplier
+                                            ? setSelectedSupplier({ ...selectedSupplier, address: e.target.value })
+                                            : setNewSupplier({ ...newSupplier, address: e.target.value })
+                                    }
+                                    disabled={!isEdit && selectedSupplier}
+                                />
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            {isEdit || !selectedSupplier ? (
+                                <button type="button" className="btn btn-primary" onClick={saveSupplier} data-bs-dismiss="modal">
+                                    Save
+                                </button>
+                            ) : null}
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -26,6 +26,10 @@ const LoginForm = () => {
                 navigate("/check-in");
             }
 
+            if(username==="2" && password==="2"){
+                navigate("/export-order");
+            }
+
             const response = await axios.post(`${BASE_URL}/login`, formData, {
                 headers: {
                     "Content-Type": "application/form",

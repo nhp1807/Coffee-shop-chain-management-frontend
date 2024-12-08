@@ -23,6 +23,8 @@ import ManagerTimesheet from './pages/manager/ManagerTimesheet';
 import ManagerStorage from './pages/manager/ManagerStorage';
 import AdminStorage from './pages/admin/AdminStorage';
 import Timesheet from './pages/employee/Timesheet';
+import ExportOrder from './pages/manager/ManagerExportOrder';
+import ExportOrderDetail from './pages/manager/ExportOrderDetail';
 
 function App() {
   return (
@@ -52,6 +54,8 @@ function App() {
           <Route path="/manager/home" element={<ManagerHome />} />
           <Route path="/manager/employee" element={<ManagerEmployee />} />
           <Route path="/manager/import-order" element={<ManagerImportOrder />} />
+          <Route path="/manager/export-order" element={<ExportOrder />} />
+          <Route path="/manager/export-order/detail/:exportOrderID" element={<ExportOrderDetail />} />
           <Route path="/manager/import-order/detail/:importOrderID" element={<ManagerImportOrderDetail />} />
           <Route path="/manager/timesheet" element={<ManagerTimesheet />} />
           <Route path="/manager/storage" element={<ManagerStorage />} />

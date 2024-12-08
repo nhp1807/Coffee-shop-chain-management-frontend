@@ -17,6 +17,7 @@ export default function ManagerSideBar() {
             <ul>
                 <li><Link to={"/manager/home"}><button><i className="bi bi-house"></i>Home</button></Link></li>
                 <li><Link to={"/manager/import-order"}><button><i className="bi bi-cart2"></i>Import Order</button></Link></li>
+                <li><Link to={"/manager/export-order"}><button><i className="bi bi-cart2"></i>Export Order</button></Link></li>
                 <li><Link to={"/manager/employee"}><button><i className="bi bi-people-fill"></i>Employee</button></Link></li>
                 <li><Link to={"/manager/timesheet"}><button><i className="bi bi-card-checklist"></i>Timesheet</button></Link></li>
                 <li><Link to={"/manager/storage"}><button><i className="bi bi-archive"></i>Storage</button></Link></li>

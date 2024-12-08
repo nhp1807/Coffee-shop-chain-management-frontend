@@ -96,7 +96,7 @@ const ExportOrderDetail = () => {
 
             response.data.data.employeeName = employeeRes.data.data.name;
             response.data.data.branchAddress = branchRes.data.data.address;
-            response.data.data.employeeID = employeeRes.data.data.supplierID;
+            response.data.data.employeeID = employeeRes.data.data.employeeID;
             response.data.data.branchID = branchRes.data.data.branchID;
 
 

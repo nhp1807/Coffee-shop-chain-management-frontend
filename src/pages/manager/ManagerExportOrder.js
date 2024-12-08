@@ -46,12 +46,12 @@ const ExportOrder = () => {
 
             setExportOrders(enrichedOrders);
         } catch (error) {
-            console.error("Error loading import orders:", error);
+            console.error("Error loading export orders:", error);
         }
     };
 
     const handleAddExportOrder = () => {
-        // Điều hướng đến trang tạo Import Order mới và truyền branchID hiện tại
+        // Điều hướng đến trang tạo Export Order mới và truyền branchID hiện tại
         navigate("/manager/export-order/detail/new", { state: { branchID } });
     };
 
@@ -68,7 +68,7 @@ const ExportOrder = () => {
             <ManagerSideBar />
             <div className="content">
                 <div className="header">
-                    <h1>Import Orders</h1>
+                    <h1>Export Orders</h1>
                     <button className="add-item-btn" onClick={handleAddExportOrder}>
                         + Add Export Order
                     </button>
@@ -81,7 +81,7 @@ const ExportOrder = () => {
                         <i className="bi bi-search"></i>
                         <input
                             type="text"
-                            placeholder="Search import order..."
+                            placeholder="Search export order..."
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
@@ -109,7 +109,7 @@ const ExportOrder = () => {
                                 <td>
                                     <button
                                         className="action-btn"
-                                        onClick={() => handleViewEditOrder(order.importID)}
+                                        onClick={() => handleViewEditOrder(order.exportID)}
                                     >
                                         View/Edit
                                     </button>

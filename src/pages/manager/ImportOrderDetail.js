@@ -128,7 +128,7 @@ const ImportOrderDetail = () => {
         }
 
         try {
-            const response = await axios.put(`${BASE_URL}/api/import-order/add/${importOrderID}`, newDetail);
+            const response = await axios.put(`${BASE_URL}/api/import-order-detail/add/${importOrderID}`, newDetail);
             CheckResponse(response);
             await loadImportOrder(importOrderID);
 
@@ -147,7 +147,7 @@ const ImportOrderDetail = () => {
     const handleDeleteDetail = async (materialID) => {
         try {
 
-            const response = await axios.delete(`${BASE_URL}/api/import-order/delete/${importOrderID}/${materialID}`);
+            const response = await axios.delete(`${BASE_URL}/api/import-order-detail/delete/${importOrderID}/${materialID}`);
             CheckResponse(response);
 
             // Cập nhật lại danh sách chi tiết sau khi xóa
@@ -157,6 +157,7 @@ const ImportOrderDetail = () => {
                     (detail) => detail.materialID !== materialID
                 ),
             }));
+            loadImportOrder(importOrderID);
         } catch (error) {
             console.error("Error deleting detail:", error);
         }

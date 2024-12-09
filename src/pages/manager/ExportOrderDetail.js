@@ -11,6 +11,9 @@ import CheckResponse from "../../api/CheckResponse";
 const ExportOrderDetail = () => {
     const { exportOrderID } = useParams();
     const navigate = useNavigate();
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editingDetail, setEditingDetail] = useState(null);
+
 
     const [exportOrder, setExportOrder] = useState({
         exportID: "",
@@ -27,7 +30,7 @@ const ExportOrderDetail = () => {
     const [newDetail, setNewDetail] = useState({
         name: "", // Đảm bảo có giá trị khởi tạo
         quantity: 0,
-        price: 0,
+        // price: 0,
         description: "",
     });
 
@@ -85,6 +88,7 @@ const ExportOrderDetail = () => {
     const loadExportOrder = async (id) => {
         try {
             const response = await axios.get(`${BASE_URL}/api/export-order/get/${id}`);
+
             const date = new Date(response.data.data.date);
             response.data.data.date = date.toLocaleDateString();
 
@@ -98,7 +102,6 @@ const ExportOrderDetail = () => {
             response.data.data.branchAddress = branchRes.data.data.address;
             response.data.data.employeeID = employeeRes.data.data.employeeID;
             response.data.data.branchID = branchRes.data.data.branchID;
-
 
             setExportOrder(response.data.data);
         } catch (error) {
@@ -118,13 +121,13 @@ const ExportOrderDetail = () => {
     };
 
     const addDetail = async () => {
-        if (!newDetail.name || !newDetail.quantity || !newDetail.price) {
+        if (!newDetail.name || !newDetail.quantity) {
             alert("Please fill in all fields before adding detail.");
             return;
         }
-    
+
         try {
-            const response = await axios.put(`${BASE_URL}/api/export-order/add/${exportOrderID}`, newDetail);
+            const response = await axios.put(`${BASE_URL}/api/export-order-detail/add/${exportOrderID}`, newDetail);
             CheckResponse(response);
             await loadExportOrder(exportOrderID);
 
@@ -132,18 +135,18 @@ const ExportOrderDetail = () => {
             setNewDetail({
                 name: "",
                 quantity: 0,
-                price: 0,
+                // price: 0,
                 description: "",
             });
         } catch (error) {
             console.error("Error adding detail:", error);
         }
     };
-    
+
     const handleDeleteDetail = async (productID) => {
         try {
 
-            const response = await axios.delete(`${BASE_URL}/api/xport-order/delete/${exportOrderID}/${productID}`);
+            const response = await axios.delete(`${BASE_URL}/api/export-order-detail/delete/${exportOrderID}/${productID}`);
             CheckResponse(response);
 
             // Cập nhật lại danh sách chi tiết sau khi xóa
@@ -153,10 +156,35 @@ const ExportOrderDetail = () => {
                     (detail) => detail.productID !== productID
                 ),
             }));
+            loadExportOrder(exportOrderID);
         } catch (error) {
             console.error("Error deleting detail:", error);
         }
     };
+
+    const handleEditDetail = async (productID) => {
+        try {
+            const response = await axios.get(`${BASE_URL}/api/export-order-detail/get/${exportOrderID}/${productID}`);
+
+            setEditingDetail(response.data.data);
+            setShowEditModal(true);
+        } catch (error) {
+            console.error("Error fetching detail:", error);
+        }
+    };
+
+    const updateDetail = async () => {
+        try {
+            await axios.put(`${BASE_URL}/api/export-order-detail/update/${exportOrderID}/${editingDetail.productID}`, editingDetail);
+            setShowEditModal(false);
+    
+            // Cập nhật lại danh sách chi tiết sau khi chỉnh sửa
+            await loadExportOrder(exportOrderID);
+        } catch (error) {
+            console.error("Error updating detail:", error);
+        }
+    };   
+    
 
     const handleProductSearch = (e) => {
         const searchTerm = e.target.value.toLowerCase();
@@ -244,6 +272,11 @@ const ExportOrderDetail = () => {
                     </select>
                 </div>
 
+                <div className="form-group">
+                    <label>Total</label>
+                    <input type="number" className="form-control" value={exportOrder.total} disabled />
+                </div>
+
                 {/* Table to display details */}
                 <h3>Details</h3>
                 <table className="table">
@@ -265,6 +298,12 @@ const ExportOrderDetail = () => {
                                     <td>{detail?.price}</td>
                                     <td>{detail?.description}</td>
                                     <td>
+                                        <button
+                                            className="action-btn"
+                                            onClick={() => handleEditDetail(detail.productID)}
+                                        >
+                                            Edit
+                                        </button>
                                         <button
                                             className="action-btn"
                                             onClick={() => handleDeleteDetail(detail.productID)}
@@ -334,7 +373,7 @@ const ExportOrderDetail = () => {
                             />
                         </div>
 
-                        <div className="form-group">
+                        {/* <div className="form-group">
                             <label>Price</label>
                             <input
                                 type="number"
@@ -344,7 +383,7 @@ const ExportOrderDetail = () => {
                                     setNewDetail({ ...newDetail, price: e.target.value })
                                 }
                             />
-                        </div>
+                        </div> */}
 
                         <div className="form-group">
                             <label>Description</label>
@@ -363,6 +402,51 @@ const ExportOrderDetail = () => {
                         </button>
                         <button className="action-btn" onClick={addDetail}>
                             Add Detail
+                        </button>
+                    </Modal.Footer>
+                </Modal>
+                <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Edit Detail</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div className="form-group">
+                            <label>Product</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={editingDetail?.name || ""}
+                                readOnly
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Quantity</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                value={editingDetail?.quantity || ""}
+                                onChange={(e) =>
+                                    setEditingDetail({ ...editingDetail, quantity: e.target.value })
+                                }
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Description</label>
+                            <textarea
+                                className="form-control"
+                                value={editingDetail?.description || ""}
+                                onChange={(e) =>
+                                    setEditingDetail({ ...editingDetail, description: e.target.value })
+                                }
+                            />
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button className="action-btn" onClick={() => setShowEditModal(false)}>
+                            Close
+                        </button>
+                        <button className="action-btn" onClick={updateDetail}>
+                            Save Changes
                         </button>
                     </Modal.Footer>
                 </Modal>

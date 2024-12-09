@@ -135,6 +135,20 @@ const AdminImportOrder = () => {
                                 <td>{order.paymentMethod}</td>
                                 <td>{order.total} VNĐ</td>
                                 <td>{order.status || "Pending"}</td>
+                                <td>
+                                    <button
+                                        className="action-btn"
+                                        onClick={() => handleViewEditOrder(order.importID)}
+                                    >
+                                        View/Edit
+                                    </button>
+                                    <button
+                                        className="action-btn confirm-btn"
+                                        onClick={() => handleConfirmOrder(order.importID)}
+                                    >
+                                        Confirm
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>

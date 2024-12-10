@@ -1,0 +1,64 @@
+/* Căn giữa toàn bộ màn hình */
+.login-container {
+    display: flex;
+    justify-content: center;  /* Căn giữa theo chiều ngang */
+    align-items: center;      /* Căn giữa theo chiều dọc */
+    height: 100vh;            /* Chiều cao 100% của màn hình */
+    background-color: #f4f4f4; /* Màu nền cho giao diện */
+}
+
+/* Căn giữa form login */
+.login-form {
+    width: 100%;
+    max-width: 400px;         /* Đặt chiều rộng tối đa cho form */
+    padding: 20px;
+    background-color: white; /* Màu nền của form */
+    border-radius: 8px;      /* Góc bo tròn cho form */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ cho form */
+}
+
+/* Tùy chỉnh tiêu đề */
+.login-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Tùy chỉnh thông báo lỗi */
+.error-message {
+    color: red;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Tùy chỉnh các ô input và button */
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;  /* Chuyển các phần tử con (label và input) thành cột */
+}
+
+label {
+    margin-bottom: 5px;
+    text-align: left;   /* Đảm bảo nhãn căn trái */
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #3967ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #1862d1;
+}

@@ -32,7 +32,7 @@ const ExportOrder = () => {
 
             const enrichedOrders = orders.map((order) => ({
                 ...order,
-                employeeName: employeeMap[order.employeeID] || "Unknown Supplier",
+                employeeName: employeeMap[order.employeeID] || "Unknown Employee",
             }));
 
             // Sắp xếp theo ngày từ mới đến cũ
@@ -92,7 +92,7 @@ const ExportOrder = () => {
                         <tr>
                             <th>#</th>
                             <th>Date</th>
-                            <th>Supplier</th>
+                            <th>Employee</th>
                             <th>Payment</th>
                             <th>Total</th>
                             <th>Actions</th>

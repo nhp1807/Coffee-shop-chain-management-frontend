@@ -31,6 +31,7 @@ export default function AdminSideBar() {
                 <li><Link to={"/admin/supplier"}><button><i className="bi bi-arrow-down-square"></i>Supplier</button></Link></li>
                 <li><Link to={"/admin/branch"}><button><i className="bi bi-shop"></i>Branch</button></Link></li>
                 <li><Link to={"/admin/employee"}><button><i className="bi bi-people-fill"></i>Employee</button></Link></li>
+                <li><Link to={"/admin/timesheet"}><button><i className="bi bi-clock"></i>Timesheet</button></Link></li>
                 <li><Link to={"/admin/account"}><button><i className="bi bi-person-circle"></i>Account</button></Link></li>
                 <li><Link to={"/"}><button><i className="bi bi-box-arrow-left"></i>Logout</button></Link></li>
             </ul>

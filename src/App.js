@@ -25,6 +25,7 @@ import AdminStorage from './pages/admin/AdminStorage';
 import Timesheet from './pages/employee/Timesheet';
 import ExportOrder from './pages/manager/ManagerExportOrder';
 import ExportOrderDetail from './pages/manager/ExportOrderDetail';
+import AdminTimesheet from './pages/admin/AdminTimesheet';
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
           <Route path="/admin/storage" element={<AdminStorage />} />
           <Route path="/admin/import-order/detail/:importOrderID" element={<AdminImportOrderDetail />} />
           <Route path="/admin/employee" element={<AdminEmployee />} />
+          <Route path="/admin/timesheet" element={<AdminTimesheet />} />
           
           {/* Manager Routes */}
           <Route path="/manager/home" element={<ManagerHome />} />

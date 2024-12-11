@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import BASE_URL from "../../config";
-// import "../../assets/styles/Statistic.css";
+import "../../assets/styles/Statistic.css";
 
 const AdminHome = () => {
   const [accountStats, setAccountStats] = useState(null);
@@ -19,7 +19,10 @@ const AdminHome = () => {
           startDate,
           endDate,
         }),
-        axios.get(`${BASE_URL}/api/product/get/stat`),
+        axios.post(`${BASE_URL}/api/product/get/stat`, {
+          startDate,
+          endDate,
+        }),
       ]);
 
       setAccountStats(accountResponse.data.data);
@@ -43,9 +46,6 @@ const AdminHome = () => {
     <div>
       <AdminSideBar />
       <div className="content">
-        <h1>Chào mừng Admin!</h1>
-        <p>Đây là trang thống kê dành cho quản trị viên.</p>
-
         {/* Bộ lọc thời gian */}
         <div className="filter-section">
           <h2>Statistic filter</h2>
@@ -65,7 +65,7 @@ const AdminHome = () => {
               onChange={(e) => setEndDate(e.target.value)}
             />
           </label>
-          <button onClick={handleFilterChange}>Lọc</button>
+          <button className="action-btn" onClick={handleFilterChange}>Filter</button>
         </div>
 
         {/* Tổng tài khoản */}
@@ -117,6 +117,7 @@ const AdminHome = () => {
               <thead>
                 <tr>
                   <th>ID</th>
+                  <th>Product name</th>
                   <th>Total order</th>
                   <th>Total revenue</th>
                 </tr>
@@ -125,6 +126,7 @@ const AdminHome = () => {
                 {productStats.map((product) => (
                   <tr key={product.productID}>
                     <td>{product.productID}</td>
+                    <td>{product.productName}</td>
                     <td>{product.totalSales}</td>
                     <td>{product.totalRevenue}</td>
                   </tr>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import '../../assets/styles/AdminProduct.css';
+import '../../assets/styles/AdminObject.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 

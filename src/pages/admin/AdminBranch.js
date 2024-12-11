@@ -3,33 +3,40 @@ import axios from "axios";
 import "../../assets/styles/AdminObject.css"; // CSS riêng cho Branch
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import SideBar from "../../components/sidebar/AdminSideBar";
+import AdminSideBar from "../../components/sidebar/AdminSideBar";
+
 const AdminBranch = () => {
     const [branches, setBranches] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedBranch, setSelectedBranch] = useState(null); // Branch được chọn
     const [isEdit, setIsEdit] = useState(false); // Để phân biệt View/Edit
     const [newBranch, setNewBranch] = useState({ address: "", phone: "", fax: "" }); // Dữ liệu cho Add Branch
+
     useEffect(() => {
         loadBranches();
     }, []);
+
     const loadBranches = async () => {
         const result = await axios.get("http://localhost:8080/api/branch/get/all");
         setBranches(result.data.data);
     };
+
     const deleteBranch = async (id) => {
         await axios.delete(`http://localhost:8080/api/branch/delete/${id}`);
         loadBranches();
     };
+
     const handleViewEdit = (branch, isEditMode) => {
         setSelectedBranch(branch);
         setIsEdit(isEditMode);
     };
+
     const handleAddBranch = () => {
         setSelectedBranch(null); // Reset selected branch
         setIsEdit(false);
         setNewBranch({ address: "", phone: "", fax: "" });
     };
+
     const saveBranch = async () => {
         if (isEdit && selectedBranch) {
             await axios.put(`http://localhost:8080/api/branch/update/${selectedBranch.branchID}`, selectedBranch);
@@ -38,12 +45,15 @@ const AdminBranch = () => {
         }
         loadBranches();
     };
+
     const filteredBranches = branches.filter((branch) =>
         branch.address.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
     return (
         <div className="admin-page">
-            <SideBar />
+            <AdminSideBar />
+
             <div className="content">
                 <div className="header">
                     <h1>Branches</h1>
@@ -51,6 +61,7 @@ const AdminBranch = () => {
                         + Add Branch
                     </button>
                 </div>
+
                 <div className="menu">
                     <h3>Branch Management</h3>
                     <p>Home > Branches</p>
@@ -63,6 +74,7 @@ const AdminBranch = () => {
                         />
                     </div>
                 </div>
+
                 <table className="table">
                     <thead>
                     <tr>
@@ -94,6 +106,7 @@ const AdminBranch = () => {
                     </tbody>
                 </table>
             </div>
+
             {/* Modal */}
             <div className="modal fade" id="branchModal" tabIndex="-1" aria-labelledby="branchModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
@@ -164,4 +177,5 @@ const AdminBranch = () => {
         </div>
     );
 };
+
 export default AdminBranch;

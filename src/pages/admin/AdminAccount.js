@@ -3,7 +3,8 @@ import axios from "axios";
 import "../../assets/styles/AdminObject.css"; // Sử dụng lại CSS của AdminProduct
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import SideBar from "../../components/sidebar/AdminSideBar";
+import AdminSideBar from "../../components/sidebar/AdminSideBar";
+
 const AdminAccount = () => {
     const [accounts, setAccounts] = useState([]);
     const [branches, setBranches] = useState([]); // Danh sách branch
@@ -11,10 +12,12 @@ const AdminAccount = () => {
     const [selectedAccount, setSelectedAccount] = useState(null); // Account được chọn
     const [isEdit, setIsEdit] = useState(false); // Để phân biệt View/Edit
     const [newAccount, setNewAccount] = useState({ username: "", role: "", email: "", branchID: "" }); // Dữ liệu cho Add Account
+
     useEffect(() => {
         loadAccounts();
         loadBranches(); // Lấy danh sách branch
     }, []);
+
     const loadAccounts = async () => {
         const result = await axios.get("http://localhost:8080/api/account/get/all");
         const accountsData = result.data.data;
@@ -35,23 +38,29 @@ const AdminAccount = () => {
         console.log("Result:" + result.data.data);
         setBranches(result.data.data);
     };
+
+
     const loadBranchName = async (branchID) => {
         const result = await axios.get(`http://localhost:8080/api/branch/get/${branchID}`);
         return result.data.data.address;
     };
+
     const deleteAccount = async (id) => {
         await axios.delete(`http://localhost:8080/api/account/delete/${id}`);
         loadAccounts();
     };
+
     const handleViewEdit = (account, isEditMode) => {
         setSelectedAccount(account);
         setIsEdit(isEditMode);
     };
+
     const handleAddAccount = () => {
         setSelectedAccount(null);
         setIsEdit(false);
         setNewAccount({ username: "", role: "", email: "", branchID: "" });
     };
+
     const saveAccount = async () => {
         if (isEdit && selectedAccount) {
             await axios.put(`http://localhost:8080/api/account/update/${selectedAccount.accountID}`, selectedAccount);
@@ -60,12 +69,15 @@ const AdminAccount = () => {
         }
         loadAccounts();
     };
+
     const filteredAccounts = accounts.filter((account) =>
         account.username.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
     return (
         <div className="admin-page">
-            <SideBar />
+            <AdminSideBar />
+
             <div className="content">
                 <div className="header">
                     <h1>Accounts</h1>
@@ -73,6 +85,7 @@ const AdminAccount = () => {
                         + Add Account
                     </button>
                 </div>
+
                 <div className="menu">
                     <h3>Account Management</h3>
                     <p>Home > Accounts</p>
@@ -85,6 +98,7 @@ const AdminAccount = () => {
                         />
                     </div>
                 </div>
+
                 <table className="table">
                     <thead>
                     <tr>
@@ -118,6 +132,7 @@ const AdminAccount = () => {
                     </tbody>
                 </table>
             </div>
+
             {/* Modal */}
             <div className="modal fade" id="accountModal" tabIndex="-1" aria-labelledby="accountModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
@@ -194,4 +209,5 @@ const AdminAccount = () => {
         </div>
     );
 };
+
 export default AdminAccount;

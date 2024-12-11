@@ -3,37 +3,44 @@ import axios from "axios";
 import "../../assets/styles/AdminObject.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import SideBar from "../../components/sidebar/AdminSideBar";
+import AdminSideBar from "../../components/sidebar/AdminSideBar";
+
 const AdminMaterial = () => {
     const [materials, setMaterials] = useState([]); // Danh sách material
     const [searchTerm, setSearchTerm] = useState(""); // Từ khóa tìm kiếm
     const [selectedMaterial, setSelectedMaterial] = useState(null); // Material đang chọn
     const [isEdit, setIsEdit] = useState(false); // Trạng thái chỉnh sửa
     const [newMaterial, setNewMaterial] = useState({ name: "" }); // Material mới
+
     useEffect(() => {
         loadMaterials(); // Tải danh sách material khi component được mount
     }, []);
+
     // Lấy danh sách material từ API
     const loadMaterials = async () => {
         const result = await axios.get("http://localhost:8080/api/material/get/all");
         setMaterials(result.data.data || []);
     };
+
     // Xóa material
     const deleteMaterial = async (id) => {
         await axios.delete(`http://localhost:8080/api/material/delete/${id}`);
         loadMaterials(); // Tải lại danh sách sau khi xóa
     };
+
     // Xử lý hiển thị modal View/Edit
     const handleViewEdit = (material, isEditMode) => {
         setSelectedMaterial(material);
         setIsEdit(isEditMode);
     };
+
     // Xử lý thêm mới material
     const handleAddMaterial = () => {
         setSelectedMaterial(null);
         setIsEdit(false);
         setNewMaterial({ name: "" }); // Reset form thêm mới
     };
+
     // Lưu material (thêm mới hoặc chỉnh sửa)
     const saveMaterial = async () => {
         if (isEdit && selectedMaterial) {
@@ -45,13 +52,16 @@ const AdminMaterial = () => {
         }
         loadMaterials(); // Tải lại danh sách
     };
+
     // Lọc material theo từ khóa tìm kiếm
     const filteredMaterials = materials.filter((material) =>
         material.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
     return (
         <div className="admin-page">
-            <SideBar />
+            <AdminSideBar />
+
             <div className="content">
                 <div className="header">
                     <h1>Materials</h1>
@@ -64,6 +74,7 @@ const AdminMaterial = () => {
                         + Add Material
                     </button>
                 </div>
+
                 <div className="menu">
                     <h3>Material Management</h3>
                     <p>Home > Materials</p>
@@ -76,6 +87,7 @@ const AdminMaterial = () => {
                         />
                     </div>
                 </div>
+
                 <table className="table">
                     <thead>
                     <tr>
@@ -115,6 +127,7 @@ const AdminMaterial = () => {
                     </tbody>
                 </table>
             </div>
+
             {/* Modal */}
             <div
                 className="modal fade"
@@ -172,4 +185,5 @@ const AdminMaterial = () => {
         </div>
     );
 };
+
 export default AdminMaterial;

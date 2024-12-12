@@ -40,7 +40,12 @@ const LoginForm = () => {
         }
     };
 
-    const handleLoginSuccess = (role) => {
+
+    const handleLoginSuccess = (role, username, branchID) => {
+        localStorage.setItem("role", role);
+        localStorage.setItem("username", username);
+        localStorage.setItem("branchID", branchID);
+
         if (role === "ROLE_ADMIN") {
             navigate("/admin/home");
         } else if (role === "ROLE_MANAGER") {

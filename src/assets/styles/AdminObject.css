@@ -34,10 +34,6 @@
     text-align: left;
 }
 
-.sidebar button:hover {
-    background-color: #1abc9c;
-}
-
 .sidebar ul ul {
     padding-left: 20px;
 }

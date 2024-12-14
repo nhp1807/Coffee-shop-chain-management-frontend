@@ -4,8 +4,10 @@ import "../../assets/styles/AdminObject.css"; // CSS riêng cho Branch
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
+import BASE_URL from "../../config";
 
 const AdminBranch = () => {
+
     const [branches, setBranches] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedBranch, setSelectedBranch] = useState(null); // Branch được chọn
@@ -17,12 +19,12 @@ const AdminBranch = () => {
     }, []);
 
     const loadBranches = async () => {
-        const result = await axios.get("http://localhost:8080/api/branch/get/all");
+        const result = await axios.get(`${BASE_URL}/branch/get/all`);
         setBranches(result.data.data);
     };
 
     const deleteBranch = async (id) => {
-        await axios.delete(`http://localhost:8080/api/branch/delete/${id}`);
+        await axios.delete(`${BASE_URL}/branch/delete/${id}`);
         loadBranches();
     };
 
@@ -39,9 +41,9 @@ const AdminBranch = () => {
 
     const saveBranch = async () => {
         if (isEdit && selectedBranch) {
-            await axios.put(`http://localhost:8080/api/branch/update/${selectedBranch.branchID}`, selectedBranch);
+            await axios.put(`${BASE_URL}/branch/update/${selectedBranch.branchID}`, selectedBranch);
         } else {
-            await axios.post("http://localhost:8080/api/branch/create", newBranch);
+            await axios.post(`${BASE_URL}/branch/create`, newBranch);
         }
         loadBranches();
     };

@@ -4,8 +4,10 @@ import "../../assets/styles/AdminObject.css"; // Sử dụng lại CSS của Adm
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
+import BASE_URL from "../../config";
 
 const AdminAccount = () => {
+
     const [accounts, setAccounts] = useState([]);
     const [branches, setBranches] = useState([]); // Danh sách branch
     const [searchTerm, setSearchTerm] = useState("");
@@ -19,7 +21,7 @@ const AdminAccount = () => {
     }, []);
 
     const loadAccounts = async () => {
-        const result = await axios.get("http://localhost:8080/api/account/get/all");
+        const result = await axios.get(`${BASE_URL}/account/get/all`);
         const accountsData = result.data.data;
 
         // Lấy address cho từng branchID
@@ -34,19 +36,19 @@ const AdminAccount = () => {
     };
 
     const loadBranches = async () => {
-        const result = await axios.get("http://localhost:8080/api/branch/get/all");
+        const result = await axios.get(`${BASE_URL}/branch/get/all`);
         console.log("Result:" + result.data.data);
         setBranches(result.data.data);
     };
 
 
     const loadBranchName = async (branchID) => {
-        const result = await axios.get(`http://localhost:8080/api/branch/get/${branchID}`);
+        const result = await axios.get(`${BASE_URL}/branch/get/${branchID}`);
         return result.data.data.address;
     };
 
     const deleteAccount = async (id) => {
-        await axios.delete(`http://localhost:8080/api/account/delete/${id}`);
+        await axios.delete(`${BASE_URL}/account/delete/${id}`);
         loadAccounts();
     };
 
@@ -63,9 +65,9 @@ const AdminAccount = () => {
 
     const saveAccount = async () => {
         if (isEdit && selectedAccount) {
-            await axios.put(`http://localhost:8080/api/account/update/${selectedAccount.accountID}`, selectedAccount);
+            await axios.put(`${BASE_URL}/account/update/${selectedAccount.accountID}`, selectedAccount);
         } else {
-            await axios.post("http://localhost:8080/api/account/create", newAccount);
+            await axios.post(`${BASE_URL}/account/create`, newAccount);
         }
         loadAccounts();
     };

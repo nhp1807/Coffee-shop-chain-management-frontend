@@ -19,13 +19,13 @@ const AdminMaterial = () => {
 
     // Lấy danh sách material từ API
     const loadMaterials = async () => {
-        const result = await axios.get('${BASE_URL}/material/get/all');
+        const result = await axios.get('${BASE_URL}/api/material/get/all');
         setMaterials(result.data.data || []);
     };
 
     // Xóa material
     const deleteMaterial = async (id) => {
-        await axios.delete(`${BASE_URL}/material/delete/${id}`);
+        await axios.delete(`${BASE_URL}/api/material/delete/${id}`);
         loadMaterials(); // Tải lại danh sách sau khi xóa
     };
 
@@ -46,10 +46,10 @@ const AdminMaterial = () => {
     const saveMaterial = async () => {
         if (isEdit && selectedMaterial) {
             // Cập nhật material
-            await axios.put(`${BASE_URL}/material/update/${selectedMaterial.materialID}`, selectedMaterial);
+            await axios.put(`${BASE_URL}/api/material/update/${selectedMaterial.materialID}`, selectedMaterial);
         } else {
             // Thêm mới material
-            await axios.post('${BASE_URL}/material/create', newMaterial);
+            await axios.post('${BASE_URL}/api/material/create', newMaterial);
         }
         loadMaterials(); // Tải lại danh sách
     };

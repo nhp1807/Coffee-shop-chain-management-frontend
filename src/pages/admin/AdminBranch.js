@@ -19,12 +19,12 @@ const AdminBranch = () => {
     }, []);
 
     const loadBranches = async () => {
-        const result = await axios.get(`${BASE_URL}/branch/get/all`);
+        const result = await axios.get(`${BASE_URL}/api/branch/get/all`);
         setBranches(result.data.data);
     };
 
     const deleteBranch = async (id) => {
-        await axios.delete(`${BASE_URL}/branch/delete/${id}`);
+        await axios.delete(`${BASE_URL}/api/branch/delete/${id}`);
         loadBranches();
     };
 
@@ -41,9 +41,9 @@ const AdminBranch = () => {
 
     const saveBranch = async () => {
         if (isEdit && selectedBranch) {
-            await axios.put(`${BASE_URL}/branch/update/${selectedBranch.branchID}`, selectedBranch);
+            await axios.put(`${BASE_URL}/api/branch/update/${selectedBranch.branchID}`, selectedBranch);
         } else {
-            await axios.post(`${BASE_URL}/branch/create`, newBranch);
+            await axios.post(`${BASE_URL}/api/branch/create`, newBranch);
         }
         loadBranches();
     };

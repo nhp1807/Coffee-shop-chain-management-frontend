@@ -16,14 +16,14 @@ const AdminProduct = () => {
 
     const loadProducts = async () => {
         try {
-            const result = await axios.get('${BASE_URL}/product/get/all');
+            const result = await axios.get('${BASE_URL}/api/product/get/all');
             const products = result.data.data || [];
 
             console.log("Products:", products);
 
             // Lấy danh sách Material và Product tương ứng
             const [materialsRes] = await Promise.all([
-                axios.get(`${BASE_URL}/material/get/all`),
+                axios.get(`${BASE_URL}/api/material/get/all`),
             ]);
             const materials = materialsRes.data.data || [];
 
@@ -59,7 +59,7 @@ const AdminProduct = () => {
 
     const handleDeleteProduct = async (productID) => {
         try {
-            await axios.delete(`${BASE_URL}/product/delete/${productID}`);
+            await axios.delete(`${BASE_URL}/api/product/delete/${productID}`);
             // Sau khi xoá thành công, tải lại danh sách sản phẩm
             loadProducts();
         } catch (error) {

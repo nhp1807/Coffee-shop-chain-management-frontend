@@ -5,9 +5,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import BASE_URL from "../../config";
+import CheckResponse from "../../api/CheckResponse";
 
 const AdminAccount = () => {
-
     const [accounts, setAccounts] = useState([]);
     const [branches, setBranches] = useState([]); // Danh sách branch
     const [searchTerm, setSearchTerm] = useState("");
@@ -31,16 +31,15 @@ const AdminAccount = () => {
                 return { ...account, branchAddress };
             })
         );
-
+    
         setAccounts(accountsWithBranchAddress);
     };
-
+    
     const loadBranches = async () => {
         const result = await axios.get(`${BASE_URL}/api/branch/get/all`);
         console.log("Result:" + result.data.data);
         setBranches(result.data.data);
     };
-
 
     const loadBranchName = async (branchID) => {
         const result = await axios.get(`${BASE_URL}/api/branch/get/${branchID}`);
@@ -48,7 +47,9 @@ const AdminAccount = () => {
     };
 
     const deleteAccount = async (id) => {
-        await axios.delete(`${BASE_URL}/api/account/delete/${id}`);
+        const response = await axios.delete(`${BASE_URL}/api/account/delete/${id}`);
+        CheckResponse(response);
+
         loadAccounts();
     };
 
@@ -64,11 +65,14 @@ const AdminAccount = () => {
     };
 
     const saveAccount = async () => {
+        var response = null;
         if (isEdit && selectedAccount) {
-            await axios.put(`${BASE_URL}/api/account/update/${selectedAccount.accountID}`, selectedAccount);
+            response = await axios.put(`${BASE_URL}/api/account/update/${selectedAccount.accountID}`, selectedAccount);
         } else {
-            await axios.post(`${BASE_URL}/api/account/create`, newAccount);
+            response = await axios.post(`${BASE_URL}/api/account/create`, newAccount);
         }
+        CheckResponse(response);
+
         loadAccounts();
     };
 
@@ -103,34 +107,34 @@ const AdminAccount = () => {
 
                 <table className="table">
                     <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Username</th>
-                        <th>Role</th>
-                        <th>Email</th>
-                        <th>Branch</th>
-                        <th>Actions</th>
-                    </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Email</th>
+                            <th>Branch</th>
+                            <th>Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {filteredAccounts.map((account, index) => (
-                        <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{account.username}</td>
-                            <td>{account.role}</td>
-                            <td>{account.email}</td>
-                            <td>{account.branchAddress || "N/A"}</td> {/* Hiển thị branchName */}
-                            <td>
-                                <button className="action-btn" data-bs-toggle="modal" data-bs-target="#accountModal" onClick={() => handleViewEdit(account, false)}>
-                                    View
-                                </button>
-                                <button className="action-btn" data-bs-toggle="modal" data-bs-target="#accountModal" onClick={() => handleViewEdit(account, true)}>
-                                    Edit
-                                </button>
-                                <button onClick={() => deleteAccount(account.accountID)} className="action-btn">Delete</button>
-                            </td>
-                        </tr>
-                    ))}
+                        {filteredAccounts.map((account, index) => (
+                            <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{account.username}</td>
+                                <td>{account.role}</td>
+                                <td>{account.email}</td>
+                                <td>{account.branchAddress || "N/A"}</td> {/* Hiển thị branchName */}
+                                <td>
+                                    <button className="action-btn" data-bs-toggle="modal" data-bs-target="#accountModal" onClick={() => handleViewEdit(account, false)}>
+                                        View
+                                    </button>
+                                    <button className="action-btn" data-bs-toggle="modal" data-bs-target="#accountModal" onClick={() => handleViewEdit(account, true)}>
+                                        Edit
+                                    </button>
+                                    <button onClick={() => deleteAccount(account.accountID)} className="action-btn">Delete</button>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>

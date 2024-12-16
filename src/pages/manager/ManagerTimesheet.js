@@ -81,7 +81,6 @@ const Timesheet = () => {
                 <div className="menu">
                     <h3>Branch Timesheets</h3>
                     <p>Home > Timesheets</p>
-                    <p>Branch Address: {branchAddress}</p>
 
                     {/* Thanh tìm kiếm */}
                     <div className="search-container">
@@ -98,24 +97,24 @@ const Timesheet = () => {
 
                 <table className="table">
                     <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Date</th>
-                        <th>Shift</th>
-                        <th>Employee</th>
-                        <th>Branch</th>
-                    </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Shift</th>
+                            <th>Employee</th>
+                            <th>Branch</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {filteredTimesheets.map((timesheet, index) => (
-                        <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{timesheet.date}</td>
-                            <td>{timesheet.shift}</td>
-                            <td>{getEmployeeName(timesheet.employeeID)}</td>
-                            <td>{branchAddress}</td>
-                        </tr>
-                    ))}
+                        {filteredTimesheets.map((timesheet, index) => (
+                            <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{timesheet.date}</td>
+                                <td>{timesheet.shift}</td>
+                                <td>{getEmployeeName(timesheet.employeeID)}</td>
+                                <td>{branchAddress}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>

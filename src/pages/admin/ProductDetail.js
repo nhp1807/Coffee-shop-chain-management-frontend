@@ -3,8 +3,9 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import AdminSideBar from "../../components/sidebar/AdminSideBar"; // Sidebar
 import "../../assets/styles/AdminObject.css"; // CSS Style
-import { Modal } from "react-bootstrap"; // To use modal
+import { Modal } from "react-bootstrap";
 import BASE_URL from "../../config";
+import CheckResponse from "../../api/CheckResponse";
 
 const ProductDetail = () => {
     const { productID } = useParams(); // To fetch the product ID from the URL
@@ -34,7 +35,7 @@ const ProductDetail = () => {
                 setProduct(response.data.data);
 
                 // Fetch material list
-                const materialsRes = await axios.get(`${BASE_URL}/api/material/get/all"`);
+                const materialsRes = await axios.get(`${BASE_URL}/api/material/get/all`);
                 setMaterials(materialsRes.data.data || []);
             } catch (error) {
                 console.error("Error loading product or materials:", error);
@@ -46,13 +47,15 @@ const ProductDetail = () => {
     }, [productID]);
 
     const handleSave = async () => {
+        var reponse;
         try {
             if (productID === "new") {
-                await axios.post(`${BASE_URL}/api/product/create`, product);
+                reponse = await axios.post(`${BASE_URL}/api/product/create`, product);
             } else {
-                await axios.put(`${BASE_URL}/api/product/update/${productID}`, product);
+                reponse = await axios.put(`${BASE_URL}/api/product/update/${productID}`, product);
             }
             navigate("/admin/product");
+            CheckResponse(reponse);
         } catch (error) {
             console.error("Error saving product:", error);
         }
@@ -64,24 +67,25 @@ const ProductDetail = () => {
             alert("Please fill in all fields before adding material.");
             return;
         }
-
+    
         try {
             // Gửi yêu cầu thêm vật liệu vào sản phẩm
             const response = await axios.put(`${BASE_URL}/api/product/add-material/${productID}`, newProductMaterial);
-
+            CheckResponse(response);
             // Sau khi thêm, gọi lại API để lấy dữ liệu cập nhật của sản phẩm
             const updatedProductResponse = await axios.get(`${BASE_URL}/api/product/get/${productID}`);
             setProduct(updatedProductResponse.data.data);  // Cập nhật lại sản phẩm với danh sách vật liệu mới
-
+    
             setShowModal(false); // Đóng modal
         } catch (error) {
             console.error("Error adding material:", error);
         }
     };
-
+    
     const handleDeleteMaterial = async (materialID) => {
         try {
-            await axios.delete(`${BASE_URL}/api/product/delete-material/${productID}/${materialID}`);
+            const response = await axios.delete(`${BASE_URL}/api/product/delete-material/${productID}/${materialID}`);
+            CheckResponse(response);
             setProduct((prevProduct) => ({
                 ...prevProduct,
                 productMaterials: prevProduct.productMaterials.filter((material) => material.materialID !== materialID),
@@ -148,35 +152,35 @@ const ProductDetail = () => {
                 <h3>Product Materials</h3>
                 <table className="table">
                     <thead>
-                    <tr>
-                        <th>Material</th>
-                        <th>Quantity</th>
-                        <th>Action</th>
-                    </tr>
+                        <tr>
+                            <th>Material</th>
+                            <th>Quantity</th>
+                            <th>Action</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {product.productMaterials.length > 0 ? (
-                        product.productMaterials.map((pm, index) => (
-                            <tr key={index}>
-                                <td>{pm.materialName || "Unknown Material"}</td>
-                                <td>{pm.quantity}</td>
-                                <td>
-                                    <button
-                                        className="action-btn"
-                                        onClick={() => handleDeleteMaterial(pm.materialID)}
-                                    >
-                                        Delete
-                                    </button>
+                        {product.productMaterials.length > 0 ? (
+                            product.productMaterials.map((pm, index) => (
+                                <tr key={index}>
+                                    <td>{pm.materialName || "Unknown Material"}</td>
+                                    <td>{pm.quantity}</td>
+                                    <td>
+                                        <button
+                                            className="action-btn"
+                                            onClick={() => handleDeleteMaterial(pm.materialID)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="3" style={{ textAlign: "center" }}>
+                                    No materials added
                                 </td>
                             </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan="3" style={{ textAlign: "center" }}>
-                                No materials added
-                            </td>
-                        </tr>
-                    )}
+                        )}
                     </tbody>
                 </table>
 

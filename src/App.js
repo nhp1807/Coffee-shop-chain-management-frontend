@@ -1,9 +1,8 @@
 import './App.css';
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import Navbar from './layout/Navbar';
 import AdminAccount from './pages/admin/AdminAccount';
 import CreateAccount from './entity/accounts/CreateAccount';
-import { BrowserRouter, Routes, Route, Router } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom'; // Đảm bảo HashRouter được import đúng
 import UpdateAccount from './entity/accounts/UpdateAccount';
 import ViewAccount from './entity/accounts/ViewAccount';
 import LoginForm from './pages/LoginForm';
@@ -21,38 +20,53 @@ import AdminImportOrder from './pages/admin/AdminImportOrder';
 import AdminEmployee from './pages/admin/AdminEmployee';
 import ProductDetail from './pages/admin/ProductDetail';
 import ManagerTimesheet from './pages/manager/ManagerTimesheet';
+import ManagerStorage from './pages/manager/ManagerStorage';
+import AdminStorage from './pages/admin/AdminStorage';
+import Timesheet from './pages/employee/Timesheet';
+import ExportOrder from './pages/manager/ManagerExportOrder';
+import ExportOrderDetail from './pages/manager/ExportOrderDetail';
+import AdminTimesheet from './pages/admin/AdminTimesheet';
 
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
+      <Router>
         <Routes>
-          <Route exact path="/" element={<LoginForm />} />
+          {/* Public Routes */}
+          <Route path="/check-in" element={<Timesheet />} />
+          <Route path="/" element={<LoginForm />} />
+          <Route path="/login" element={<LoginForm />} />
           
-          <Route exact path="/login" element={<LoginForm />} />
-          <Route exact path="/admin/home" element={<AdminHome />} />
-          <Route exact path="/admin/account" element={<AdminAccount />} />
-          <Route exact path="/admin/branch" element={<AdminBranch />} />
-          <Route exact path="/admin/product" element={<AdminProduct />} />
-          <Route exact path="/admin/product/detail/:productId" element={<ProductDetail />} />
-          <Route exact path="/admin/material" element={<AdminMaterial />} />
-          <Route exact path="/admin/supplier" element={<AdminSupplier />} />
-          <Route exact path="/admin/import-order" element={<AdminImportOrder />} />
-          <Route exact path="/admin/import-order/detail/:importOrderId" element={<AdminImportOrderDetail />} />
-          <Route exact path="/admin/employee" element={<AdminEmployee />} />
-          <Route exact path="/admin/account/get/:id" element={<ViewAccount />} />
+          {/* Admin Routes */}
+          <Route path="/admin/home" element={<AdminHome />} />
+          <Route path="/admin/account" element={<AdminAccount />} />
+          <Route path="/admin/account/get/:id" element={<ViewAccount />} />
+          <Route path="/admin/branch" element={<AdminBranch />} />
+          <Route path="/admin/product" element={<AdminProduct />} />
+          <Route path="/admin/product/detail/:productID" element={<ProductDetail />} />
+          <Route path="/admin/material" element={<AdminMaterial />} />
+          <Route path="/admin/supplier" element={<AdminSupplier />} />
+          <Route path="/admin/import-order" element={<AdminImportOrder />} />
+          <Route path="/admin/storage" element={<AdminStorage />} />
+          <Route path="/admin/import-order/detail/:importOrderID" element={<AdminImportOrderDetail />} />
+          <Route path="/admin/employee" element={<AdminEmployee />} />
+          <Route path="/admin/timesheet" element={<AdminTimesheet />} />
+          
+          {/* Manager Routes */}
+          <Route path="/manager/home" element={<ManagerHome />} />
+          <Route path="/manager/employee" element={<ManagerEmployee />} />
+          <Route path="/manager/import-order" element={<ManagerImportOrder />} />
+          <Route path="/manager/export-order" element={<ExportOrder />} />
+          <Route path="/manager/export-order/detail/:exportOrderID" element={<ExportOrderDetail />} />
+          <Route path="/manager/import-order/detail/:importOrderID" element={<ManagerImportOrderDetail />} />
+          <Route path="/manager/timesheet" element={<ManagerTimesheet />} />
+          <Route path="/manager/storage" element={<ManagerStorage />} />
 
-          <Route exact path="/manager/home" element={<ManagerHome />} />
-          <Route exact path="/manager/employee" element={<ManagerEmployee />} />
-          <Route exact path="/manager/import-order" element={<ManagerImportOrder />} />
-          <Route exact path="/manager/import-order/detail/:importOrderId" element={<ManagerImportOrderDetail />} />
-          <Route exact path="/manager/timesheet" element={<ManagerTimesheet />} />
-
-          <Route exact path="/viewaccount/:id" element={<ViewAccount />} />
-          <Route exact path="/createaccount" element={<CreateAccount />} />
-          <Route exact path="/updateaccount/:id" element={<UpdateAccount />} />
+          {/* Account Management Routes */}
+          <Route path="/createaccount" element={<CreateAccount />} />
+          <Route path="/updateaccount/:id" element={<UpdateAccount />} />
         </Routes>
-      </BrowserRouter>
+      </Router>
     </div>
   );
 }

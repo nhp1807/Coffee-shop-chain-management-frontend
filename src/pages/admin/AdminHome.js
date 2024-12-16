@@ -1,86 +1,143 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../../assets/styles/AdminObject.css"; // Sử dụng lại CSS của AdminProduct
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
+import BASE_URL from "../../config";
+import "../../assets/styles/Statistic.css";
 
-const AdminAccount = () => {
-  const [accounts, setAccounts] = useState([]);
-  const [branches, setBranches] = useState([]); // Danh sách branch
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedAccount, setSelectedAccount] = useState(null); // Account được chọn
-  const [isEdit, setIsEdit] = useState(false); // Để phân biệt View/Edit
-  const [newAccount, setNewAccount] = useState({ username: "", role: "", email: "", branchID: "" }); // Dữ liệu cho Add Account
+const AdminHome = () => {
+  const [accountStats, setAccountStats] = useState(null);
+  const [branchStats, setBranchStats] = useState(null);
+  const [productStats, setProductStats] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+
+  const fetchStatistics = async () => {
+    try {
+      const [accountResponse, branchResponse, productResponse] = await Promise.all([
+        axios.get(`${BASE_URL}/api/account/get/stat`),
+        axios.post(`${BASE_URL}/api/branch/get/stat/all`, {
+          startDate,
+          endDate,
+        }),
+        axios.post(`${BASE_URL}/api/product/get/stat`, {
+          startDate,
+          endDate,
+        }),
+      ]);
+
+      setAccountStats(accountResponse.data.data);
+      setBranchStats(branchResponse.data.data);
+      setProductStats(productResponse.data.data);
+    } catch (error) {
+      console.error("Error fetching statistics:", error);
+    }
+  };
 
   useEffect(() => {
-    loadAccounts();
-    loadBranches(); // Lấy danh sách branch
+    fetchStatistics();
   }, []);
 
-  const loadAccounts = async () => {
-    const result = await axios.get("http://localhost:8080/api/account/get/all");
-    const accountsData = result.data.data;
-
-    // Lấy address cho từng branchID
-    const accountsWithBranchAddress = await Promise.all(
-      accountsData.map(async (account) => {
-        const branchAddress = account.branchID ? await loadBranchName(account.branchID) : "N/A";
-        return { ...account, branchAddress };
-      })
-    );
-
-    setAccounts(accountsWithBranchAddress);
+  const handleFilterChange = () => {
+    // Fetch data again with updated dates
+    fetchStatistics();
   };
-
-
-  const loadBranches = async () => {
-    const result = await axios.get("http://localhost:8080/api/branch/get/all");
-    console.log("Result:" + result.data.data);
-    setBranches(result.data.data);
-  };
-
-  const loadBranchName = async (branchID) => {
-    const result = await axios.get(`http://localhost:8080/api/branch/get/${branchID}`);
-    return result.data.data.address;
-  };
-
-  const deleteAccount = async (id) => {
-    await axios.delete(`http://localhost:8080/api/account/delete/${id}`);
-    loadAccounts();
-  };
-
-  const handleViewEdit = (account, isEditMode) => {
-    setSelectedAccount(account);
-    setIsEdit(isEditMode);
-  };
-
-  const handleAddAccount = () => {
-    setSelectedAccount(null);
-    setIsEdit(false);
-    setNewAccount({ username: "", role: "", email: "", branchID: "" });
-  };
-
-  const saveAccount = async () => {
-    if (isEdit && selectedAccount) {
-      await axios.put(`http://localhost:8080/api/account/update/${selectedAccount.accountID}`, selectedAccount);
-    } else {
-      await axios.post("http://localhost:8080/api/account/create", newAccount);
-    }
-    loadAccounts();
-  };
-
-  const filteredAccounts = accounts.filter((account) =>
-    account.username.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
-    <div className="admin-page">
+    <div>
       <AdminSideBar />
+      <div className="content">
+        {/* Bộ lọc thời gian */}
+        <div className="filter-section">
+          <h2>Statistic filter</h2>
+          <label>
+            Start date:
+            <input
+              type="date"
+              value={startDate || ""}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+          </label>
+          <label>
+            End date:
+            <input
+              type="date"
+              value={endDate || ""}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+          </label>
+          <button className="action-btn" onClick={handleFilterChange}>Filter</button>
+        </div>
 
-      
+        {/* Tổng tài khoản */}
+        {accountStats && (
+          <div className="stat-section">
+            <h2>Account statistics</h2>
+            <p>
+              Total accounts: <strong>{accountStats.totalAccount}</strong>
+            </p>
+          </div>
+        )}
+
+        {/* Thống kê chi nhánh */}
+        {branchStats && branchStats.length > 0 && (
+          <div className="stat-section">
+            <h2>Branch statistics</h2>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Branch</th>
+                  <th>Total employee</th>
+                  <th>Total export order</th>
+                  <th>Export order revenue</th>
+                  <th>Total import order</th>
+                  <th>Import order cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                {branchStats.map((branch) => (
+                  <tr key={branch.branchID}>
+                    <td>{branch.branchID}</td>
+                    <td>{branch.totalEmployees}</td>
+                    <td>{branch.totalExportedOrders}</td>
+                    <td>{branch.totalExportedOrdersMoney}</td>
+                    <td>{branch.totalImportedOrders}</td>
+                    <td>{branch.totalImportedOrdersMoney}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* Thống kê sản phẩm */}
+        {productStats && productStats.length > 0 && (
+          <div className="stat-section">
+            <h2>Product statistics</h2>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Product name</th>
+                  <th>Total order</th>
+                  <th>Total revenue</th>
+                </tr>
+              </thead>
+              <tbody>
+                {productStats.map((product) => (
+                  <tr key={product.productID}>
+                    <td>{product.productID}</td>
+                    <td>{product.productName}</td>
+                    <td>{product.totalSales}</td>
+                    <td>{product.totalRevenue}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
-export default AdminAccount;
+export default AdminHome;

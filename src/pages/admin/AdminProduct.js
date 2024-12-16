@@ -4,6 +4,7 @@ import "../../assets/styles/AdminObject.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import { useNavigate } from "react-router-dom";
 import BASE_URL from "../../config";
+import CheckResponse from "../../api/CheckResponse";
 
 const AdminProduct = () => {
     const [products, setProducts] = useState([]);
@@ -16,13 +17,13 @@ const AdminProduct = () => {
 
     const loadProducts = async () => {
         try {
-            const result = await axios.get('${BASE_URL}/api/product/get/all');
+            const result = await axios.get(`${BASE_URL}/api/product/get/all`);
             const products = result.data.data || [];
 
             console.log("Products:", products);
 
             // Lấy danh sách Material và Product tương ứng
-            const [materialsRes] = await Promise.all([
+            const [materialsRes] = await Promise.all([ 
                 axios.get(`${BASE_URL}/api/material/get/all`),
             ]);
             const materials = materialsRes.data.data || [];
@@ -53,14 +54,14 @@ const AdminProduct = () => {
         navigate("/admin/product/detail/new");
     };
 
-    const handleViewEditProduct = (productID) => {
-        navigate(`/admin/product/detail/${productID}`);
+    const handleViewEditProduct = (productId) => {
+        navigate(`/admin/product/detail/${productId}`);
     };
 
-    const handleDeleteProduct = async (productID) => {
+    const handleDeleteProduct = async (productId) => {
         try {
-            await axios.delete(`${BASE_URL}/api/product/delete/${productID}`);
-            // Sau khi xoá thành công, tải lại danh sách sản phẩm
+            const reponse = await axios.delete(`${BASE_URL}/api/product/delete/${productId}`);
+            CheckResponse(reponse);
             loadProducts();
         } catch (error) {
             console.error("Error deleting product:", error);
@@ -73,7 +74,7 @@ const AdminProduct = () => {
 
     return (
         <div className="admin-page">
-            <AdminSideBar/>
+            <AdminSideBar />
             <div className="content">
                 <div className="header">
                     <h1>Products</h1>
@@ -97,39 +98,41 @@ const AdminProduct = () => {
 
                 <table className="table">
                     <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Price</th>
-                        <th>Image</th>
-                        <th>Actions</th>
-                    </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Image</th>
+                            <th>Recipe</th>
+                            <th>Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {filteredProducts.map((product, index) => (
-                        <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{product.name}</td>
-                            <td>{product.description}</td>
-                            <td>{product.price} VNĐ</td>
-                            <td><img src={product.image} alt={product.name} width="50"/></td>
-                            <td>
-                                <button
-                                    className="action-btn"
-                                    onClick={() => handleViewEditProduct(product.productID)}
-                                >
-                                    View/Edit
-                                </button>
-                                <button
-                                    className="action-btn"
-                                    onClick={() => handleDeleteProduct(product.productID)}
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
+                        {filteredProducts.map((product, index) => (
+                            <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{product.name}</td>
+                                <td>{product.description}</td>
+                                <td>{product.price} VNĐ</td>
+                                <td><img src={product.image} alt={product.name} width="50" /></td>
+                                <td>{product.recipe}</td>
+                                <td>
+                                    <button
+                                        className="action-btn"
+                                        onClick={() => handleViewEditProduct(product.productID)}
+                                    >
+                                        View/Edit
+                                    </button>
+                                    <button
+                                        className="action-btn"
+                                        onClick={() => handleDeleteProduct(product.productID)}
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>

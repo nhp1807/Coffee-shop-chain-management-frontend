@@ -6,6 +6,8 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import BASE_URL from "../../config";
 
+import CheckResponse from "../../api/CheckResponse";
+
 const AdminBranch = () => {
 
     const [branches, setBranches] = useState([]);
@@ -24,7 +26,8 @@ const AdminBranch = () => {
     };
 
     const deleteBranch = async (id) => {
-        await axios.delete(`${BASE_URL}/api/branch/delete/${id}`);
+        const reponse = await axios.delete(`${BASE_URL}/api/branch/delete/${id}`);
+        CheckResponse(reponse);
         loadBranches();
     };
 
@@ -40,11 +43,13 @@ const AdminBranch = () => {
     };
 
     const saveBranch = async () => {
+        var respone;
         if (isEdit && selectedBranch) {
-            await axios.put(`${BASE_URL}/api/branch/update/${selectedBranch.branchID}`, selectedBranch);
+            respone = await axios.put(`${BASE_URL}/api/branch/update/${selectedBranch.branchID}`, selectedBranch);
         } else {
-            await axios.post(`${BASE_URL}/api/branch/create`, newBranch);
+            respone = await axios.post(`${BASE_URL}/api/branch/create`, newBranch);
         }
+        CheckResponse(respone);
         loadBranches();
     };
 
@@ -79,32 +84,32 @@ const AdminBranch = () => {
 
                 <table className="table">
                     <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Address</th>
-                        <th>Phone</th>
-                        <th>Fax</th>
-                        <th>Actions</th>
-                    </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Address</th>
+                            <th>Phone</th>
+                            <th>Fax</th>
+                            <th>Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {filteredBranches.map((branch, index) => (
-                        <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{branch.address}</td>
-                            <td>{branch.phone}</td>
-                            <td>{branch.fax}</td>
-                            <td>
-                                <button className="action-btn" data-bs-toggle="modal" data-bs-target="#branchModal" onClick={() => handleViewEdit(branch, false)}>
-                                    View
-                                </button>
-                                <button className="action-btn" data-bs-toggle="modal" data-bs-target="#branchModal" onClick={() => handleViewEdit(branch, true)}>
-                                    Edit
-                                </button>
-                                <button onClick={() => deleteBranch(branch.branchID)} className="action-btn">Delete</button>
-                            </td>
-                        </tr>
-                    ))}
+                        {filteredBranches.map((branch, index) => (
+                            <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{branch.address}</td>
+                                <td>{branch.phone}</td>
+                                <td>{branch.fax}</td>
+                                <td>
+                                    <button className="action-btn" data-bs-toggle="modal" data-bs-target="#branchModal" onClick={() => handleViewEdit(branch, false)}>
+                                        View
+                                    </button>
+                                    <button className="action-btn" data-bs-toggle="modal" data-bs-target="#branchModal" onClick={() => handleViewEdit(branch, true)}>
+                                        Edit
+                                    </button>
+                                    <button onClick={() => deleteBranch(branch.branchID)} className="action-btn">Delete</button>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>

@@ -8,134 +8,134 @@ import { Modal } from "react-bootstrap";
 import BASE_URL from "../../config";
 import CheckResponse from "../../api/CheckResponse";
 
-const ImportOrderDetail = () => {
-    const { importOrderID } = useParams();
+const ExportOrderDetail = () => {
+    const { exportOrderID } = useParams();
     const navigate = useNavigate();
     const [showEditModal, setShowEditModal] = useState(false);
     const [editingDetail, setEditingDetail] = useState(null);
 
-    const [importOrder, setImportOrder] = useState({
-        importID: "",
+
+    const [exportOrder, setExportOrder] = useState({
+        exportID: "",
         total: 0,
         paymentMethod: "cash",
         date: "",
-        status: "",
-        supplierID: "",
+        employeeID: "",
         branchID: "",
-        detailImportOrders: [],
+        detailExportOrders: [],
     });
-    const [suppliers, setSuppliers] = useState([]);
+    const [employees, setEmployees] = useState([]);
     const [branches, setBranches] = useState([]);
-    const [materials, setMaterials] = useState([]); // Dữ liệu nguyên liệu (Material)
+    const [products, setProducts] = useState([]); // Dữ liệu nguyên liệu (Material)
     const [newDetail, setNewDetail] = useState({
         name: "", // Đảm bảo có giá trị khởi tạo
         quantity: 0,
-        price: 0,
+        // price: 0,
         description: "",
     });
 
     const [showModal, setShowModal] = useState(false); // Trạng thái của modal
-    const [filteredMaterials, setFilteredMaterials] = useState([]); // Lưu trữ danh sách vật liệu lọc được
+    const [filteredProducts, setFilteredProducts] = useState([]); // Lưu trữ danh sách vật liệu lọc được
 
     useEffect(() => {
         const loadData = async () => {
             try {
-                await loadSuppliersAndBranches();
-                await loadMaterials();
+                await loadEmployeesAndBranches();
+                await loadProducts();
 
                 // Lấy branchID từ localStorage
                 const storedBranchID = localStorage.getItem("branchID");
                 if (storedBranchID) {
-                    setImportOrder((prevOrder) => ({
+                    setExportOrder((prevOrder) => ({
                         ...prevOrder,
                         branchID: storedBranchID, // Cập nhật branchID từ localStorage
                     }));
                 }
 
-                if (importOrderID !== "new") {
-                    await loadImportOrder(importOrderID);
+                if (exportOrderID !== "new") {
+                    await loadExportOrder(exportOrderID);
                 }
             } catch (error) {
                 console.error("Error loading data:", error);
             }
         };
         loadData();
-    }, [importOrderID]);
+    }, [exportOrderID]);
 
-    const loadSuppliersAndBranches = async () => {
+    const loadEmployeesAndBranches = async () => {
         try {
-            const [suppliersRes, branchesRes] = await Promise.all([
-                axios.get(`${BASE_URL}/api/supplier/get/all`),
+            const [employeesRes, branchesRes] = await Promise.all([
+                axios.get(`${BASE_URL}/api/employee/get/all`),
                 axios.get(`${BASE_URL}/api/branch/get/all`),
             ]);
 
-            setSuppliers(suppliersRes.data.data || []);
+            setEmployees(employeesRes.data.data || []);
             setBranches(branchesRes.data.data || []);
         } catch (error) {
-            console.error("Error loading suppliers or branches:", error);
+            console.error("Error loading employees or branches:", error);
         }
     };
 
-    const loadMaterials = async () => {
+    const loadProducts = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/api/material/get/all`);
-            setMaterials(response.data.data || []);
+            const response = await axios.get(`${BASE_URL}/api/product/get/all`);
+            setProducts(response.data.data || []);
         } catch (error) {
-            console.error("Error loading materials:", error);
+            console.error("Error loading products:", error);
         }
     };
 
-    const loadImportOrder = async (id) => {
+    const loadExportOrder = async (id) => {
         try {
-            const response = await axios.get(`${BASE_URL}/api/import-order/get/${id}`);
+            const response = await axios.get(`${BASE_URL}/api/export-order/get/${id}`);
+
             const date = new Date(response.data.data.date);
             response.data.data.date = date.toLocaleDateString();
 
-            // Get supplier and branch name
-            const [supplierRes, branchRes] = await Promise.all([
-                axios.get(`${BASE_URL}/api/supplier/get/${response.data.data.supplierID}`),
+            // Get employee and branch name
+            const [employeeRes, branchRes] = await Promise.all([
+                axios.get(`${BASE_URL}/api/employee/get/${response.data.data.employeeID}`),
                 axios.get(`${BASE_URL}/api/branch/get/${response.data.data.branchID}`),
             ]);
 
-            response.data.data.supplierName = supplierRes.data.data.name;
+            response.data.data.employeeName = employeeRes.data.data.name;
             response.data.data.branchAddress = branchRes.data.data.address;
-            response.data.data.supplierID = supplierRes.data.data.supplierID;
+            response.data.data.employeeID = employeeRes.data.data.employeeID;
             response.data.data.branchID = branchRes.data.data.branchID;
 
-
-            setImportOrder(response.data.data);
+            setExportOrder(response.data.data);
         } catch (error) {
-            console.error("Error loading import order:", error);
+            console.error("Error loading export order:", error);
         }
     };
 
     const handleSave = async () => {
         try {
-            if (importOrderID === "new") {
-                await axios.post(`${BASE_URL}/api/import-order/create`, importOrder);
+            if (exportOrderID === "new") {
+                await axios.post(`${BASE_URL}/api/export-order/create`, exportOrder);
             }
-            navigate("/manager/import-order");
+            navigate("/manager/export-order");
         } catch (error) {
             console.error("Error saving import order:", error);
         }
     };
 
     const addDetail = async () => {
-        if (!newDetail.name || !newDetail.quantity || !newDetail.price) {
+        if (!newDetail.name || !newDetail.quantity) {
             alert("Please fill in all fields before adding detail.");
             return;
         }
 
         try {
-            const response = await axios.put(`${BASE_URL}/api/import-order-detail/add/${importOrderID}`, newDetail);
+            const response = await axios.put(`${BASE_URL}/api/export-order-detail/add/${exportOrderID}`, newDetail);
             CheckResponse(response);
-            await loadImportOrder(importOrderID);
+            await loadExportOrder(exportOrderID);
 
             setShowModal(false);
             setNewDetail({
                 name: "",
                 quantity: 0,
-                price: 0,
+                // price: 0,
                 description: "",
             });
         } catch (error) {
@@ -143,66 +143,68 @@ const ImportOrderDetail = () => {
         }
     };
 
-    const handleDeleteDetail = async (materialID) => {
+    const handleDeleteDetail = async (productID) => {
         try {
 
-            const response = await axios.delete(`${BASE_URL}/api/import-order-detail/delete/${importOrderID}/${materialID}`);
+            const response = await axios.delete(`${BASE_URL}/api/export-order-detail/delete/${exportOrderID}/${productID}`);
             CheckResponse(response);
 
             // Cập nhật lại danh sách chi tiết sau khi xóa
-            setImportOrder((prevOrder) => ({
+            setExportOrder((prevOrder) => ({
                 ...prevOrder,
-                detailImportOrders: prevOrder.detailImportOrders.filter(
-                    (detail) => detail.materialID !== materialID
+                detailExportOrders: prevOrder.detailExportOrders.filter(
+                    (detail) => detail.productID !== productID
                 ),
             }));
-            loadImportOrder(importOrderID);
+            loadExportOrder(exportOrderID);
         } catch (error) {
             console.error("Error deleting detail:", error);
         }
     };
 
-    const handleEditDetail = async (materialID) => {
+    const handleEditDetail = async (productID) => {
         try {
-            const response = await axios.get(`${BASE_URL}/api/import-order-detail/get/${importOrderID}/${materialID}`);
+            const response = await axios.get(`${BASE_URL}/api/export-order-detail/get/${exportOrderID}/${productID}`);
+
             setEditingDetail(response.data.data);
             setShowEditModal(true);
         } catch (error) {
             console.error("Error fetching detail:", error);
         }
-    }; 
-    
+    };
+
     const updateDetail = async () => {
         try {
-            await axios.put(`${BASE_URL}/api/import-order-detail/update/${importOrderID}/${editingDetail.materialID}`, editingDetail);
+            await axios.put(`${BASE_URL}/api/export-order-detail/update/${exportOrderID}/${editingDetail.productID}`, editingDetail);
             setShowEditModal(false);
     
             // Cập nhật lại danh sách chi tiết sau khi chỉnh sửa
-            await loadImportOrder(importOrderID);
+            await loadExportOrder(exportOrderID);
         } catch (error) {
             console.error("Error updating detail:", error);
         }
-    };    
+    };   
+    
 
-    const handleMaterialSearch = (e) => {
+    const handleProductSearch = (e) => {
         const searchTerm = e.target.value.toLowerCase();
         setNewDetail({ ...newDetail, name: e.target.value });
-        setFilteredMaterials(
-            materials.filter((material) => material.name && material.name.toLowerCase().includes(searchTerm))
+        setFilteredProducts(
+            products.filter((product) => product.name && product.name.toLowerCase().includes(searchTerm))
         );
     };
 
 
-    const handleMaterialSelect = (name) => {
+    const handleProductSelect = (name) => {
         if (!name) {
-            console.error("Material name is required!");
+            console.error("Product name is required!");
             return;
         }
         setNewDetail({
             ...newDetail,
             name: name,
         });
-        setFilteredMaterials([]);  // Đóng danh sách gợi ý khi đã chọn
+        setFilteredProducts([]);  // Đóng danh sách gợi ý khi đã chọn
     };
 
 
@@ -211,28 +213,28 @@ const ImportOrderDetail = () => {
             <ManagerSideBar />
             <div className="content">
                 <div className="header">
-                    <h1>{importOrderID === "new" ? "Add New Import Order" : "Edit Import Order"}</h1>
+                    <h1>{exportOrderID === "new" ? "Add New Import Order" : "Edit Import Order"}</h1>
                 </div>
 
                 <div className="menu">
-                    <h3>Import Order Detail</h3>
-                    <p>Home > Import Order > {importOrderID === "new" ? "New" : "Edit"}</p>
+                    <h3>Export Order Detail</h3>
+                    <p>Home > Export Order > {exportOrderID === "new" ? "New" : "Edit"}</p>
                 </div>
 
-                {/* Form Supplier and Branch */}
+                {/* Form Employee and Branch */}
                 <div className="form-group">
-                    <label>Supplier</label>
+                    <label>Employee</label>
                     <select
                         className="form-control"
-                        value={importOrder.supplierID || ""}
+                        value={exportOrder.employeeID || ""}
                         onChange={(e) =>
-                            setImportOrder({ ...importOrder, supplierID: e.target.value })
+                            setExportOrder({ ...exportOrder, employeeID: e.target.value })
                         }
                     >
-                        <option value="">-- Select Supplier --</option>
-                        {suppliers.map((supplier) => (
-                            <option key={supplier.supplierID} value={supplier.supplierID}>
-                                {supplier.name}
+                        <option value="">-- Select Employee --</option>
+                        {employees.map((employee) => (
+                            <option key={employee.employeeID} value={employee.employeeID}>
+                                {employee.name}
                             </option>
                         ))}
                     </select>
@@ -242,9 +244,9 @@ const ImportOrderDetail = () => {
                     <label>Branch</label>
                     <select
                         className="form-control"
-                        value={importOrder.branchID || ""}
+                        value={exportOrder.branchID || ""}
                         onChange={(e) =>
-                            setImportOrder({ ...importOrder, branchID: e.target.value })
+                            setExportOrder({ ...exportOrder, branchID: e.target.value })
                         }
                     >
                         <option value="">-- Select Branch --</option>
@@ -260,18 +262,19 @@ const ImportOrderDetail = () => {
                     <label>Payment Method</label>
                     <select
                         className="form-control"
-                        value={importOrder.paymentMethod}
+                        value={exportOrder.paymentMethod}
                         onChange={(e) =>
-                            setImportOrder({ ...importOrder, paymentMethod: e.target.value })
+                            setExportOrder({ ...exportOrder, paymentMethod: e.target.value })
                         }
                     >
                         <option value="cash">Cash</option>
                         <option value="bank">Bank</option>
                     </select>
                 </div>
+
                 <div className="form-group">
                     <label>Total</label>
-                    <input type="number" className="form-control" value={importOrder.total} readOnly />
+                    <input type="number" className="form-control" value={exportOrder.total} disabled />
                 </div>
 
                 {/* Table to display details */}
@@ -287,23 +290,23 @@ const ImportOrderDetail = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {importOrder?.detailImportOrders?.length > 0 ? (
-                            importOrder.detailImportOrders.map((detail, index) => (
+                        {exportOrder?.detailExportOrders?.length > 0 ? (
+                            exportOrder.detailExportOrders.map((detail, index) => (
                                 <tr key={index}>
-                                    <td>{detail?.name || "Unknown Material"}</td> {/* Kiểm tra xem detail.name có tồn tại không */}
+                                    <td>{detail?.name || "Unknown Product"}</td> {/* Kiểm tra xem detail.name có tồn tại không */}
                                     <td>{detail?.quantity}</td>
                                     <td>{detail?.price}</td>
                                     <td>{detail?.description}</td>
                                     <td>
                                         <button
                                             className="action-btn"
-                                            onClick={() => handleEditDetail(detail.materialID)}
+                                            onClick={() => handleEditDetail(detail.productID)}
                                         >
                                             Edit
                                         </button>
                                         <button
                                             className="action-btn"
-                                            onClick={() => handleDeleteDetail(detail.materialID)}
+                                            onClick={() => handleDeleteDetail(detail.productID)}
                                         >
                                             Delete
                                         </button>
@@ -318,6 +321,7 @@ const ImportOrderDetail = () => {
                             </tr>
                         )}
                     </tbody>
+
                 </table>
 
                 <button className="action-btn" onClick={() => setShowModal(true)}>
@@ -334,23 +338,23 @@ const ImportOrderDetail = () => {
                     </Modal.Header>
                     <Modal.Body>
                         <div className="form-group" style={{ position: 'relative' }}>  {/* Thêm style relative cho form-group */}
-                            <label>Material</label>
+                            <label>Product</label>
                             <input
                                 type="text"
                                 className="form-control"
                                 value={newDetail.name}
-                                onChange={handleMaterialSearch}
-                                placeholder="Enter material name"
+                                onChange={handleProductSearch}
+                                placeholder="Enter product name"
                             />
                             {/* Hiển thị danh sách gợi ý nếu có */}
-                            {filteredMaterials.length > 0 && (
+                            {filteredProducts.length > 0 && (
                                 <ul className="suggestions-list">
-                                    {filteredMaterials.map((material) => (
+                                    {filteredProducts.map((product) => (
                                         <li
-                                            key={material.materialID}
-                                            onClick={() => handleMaterialSelect(material.name)}
+                                            key={product.productID}
+                                            onClick={() => handleProductSelect(product.name)}
                                         >
-                                            {material.name}
+                                            {product.name}
                                         </li>
                                     ))}
                                 </ul>
@@ -369,7 +373,7 @@ const ImportOrderDetail = () => {
                             />
                         </div>
 
-                        <div className="form-group">
+                        {/* <div className="form-group">
                             <label>Price</label>
                             <input
                                 type="number"
@@ -379,7 +383,7 @@ const ImportOrderDetail = () => {
                                     setNewDetail({ ...newDetail, price: e.target.value })
                                 }
                             />
-                        </div>
+                        </div> */}
 
                         <div className="form-group">
                             <label>Description</label>
@@ -407,7 +411,7 @@ const ImportOrderDetail = () => {
                     </Modal.Header>
                     <Modal.Body>
                         <div className="form-group">
-                            <label>Material</label>
+                            <label>Product</label>
                             <input
                                 type="text"
                                 className="form-control"
@@ -423,17 +427,6 @@ const ImportOrderDetail = () => {
                                 value={editingDetail?.quantity || ""}
                                 onChange={(e) =>
                                     setEditingDetail({ ...editingDetail, quantity: e.target.value })
-                                }
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label>Price</label>
-                            <input
-                                type="number"
-                                className="form-control"
-                                value={editingDetail?.price || ""}
-                                onChange={(e) =>
-                                    setEditingDetail({ ...editingDetail, price: e.target.value })
                                 }
                             />
                         </div>
@@ -462,4 +455,4 @@ const ImportOrderDetail = () => {
     );
 };
 
-export default ImportOrderDetail;
+export default ExportOrderDetail;

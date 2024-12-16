@@ -4,6 +4,8 @@ import "../../assets/styles/AdminObject.css"; // Sử dụng lại CSS của Adm
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import ManagerSideBar from "../../components/sidebar/ManagerSideBar";
+import BASE_URL from "../../config";
+import CheckResponse from "../../api/CheckResponse";
 
 const AdminEmployee = () => {
     const [employees, setEmployees] = useState([]);
@@ -17,6 +19,7 @@ const AdminEmployee = () => {
         email: "",
         address: "",
         branchID: "",
+        shiftSalary: 0,
     });
 
     const branchID = localStorage.getItem("branchID"); // Lấy branchID từ localStorage
@@ -29,7 +32,7 @@ const AdminEmployee = () => {
 
     const loadEmployees = async (branchID) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/employee/get/branch/${branchID}`);
+            const response = await axios.get(`${BASE_URL}/api/employee/get/branch/${branchID}`);
             const employees = response.data.data;
 
             // Format date
@@ -38,6 +41,7 @@ const AdminEmployee = () => {
                 employee.dob = date.toLocaleDateString();
             });
 
+            console.log("Employees:", employees);
             setEmployees(employees);
         } catch (error) {
             console.error("Failed to load employees:", error);
@@ -45,7 +49,8 @@ const AdminEmployee = () => {
     };
 
     const deleteEmployee = async (id) => {
-        await axios.delete(`http://localhost:8080/api/employee/delete/${id}`);
+        const response = await axios.delete(`${BASE_URL}/api/employee/delete/${id}`);
+        CheckResponse(response);
         loadEmployees(branchID); // Load lại danh sách sau khi xóa
     };
 
@@ -68,11 +73,13 @@ const AdminEmployee = () => {
     };
 
     const saveEmployee = async () => {
+        var response;
         if (isEdit && selectedEmployee) {
-            await axios.put(`http://localhost:8080/api/employee/update/${selectedEmployee.employeeID}`, selectedEmployee);
+            response = await axios.put(`${BASE_URL}/api/employee/update/${selectedEmployee.employeeID}`, selectedEmployee);
         } else {
-            await axios.post("http://localhost:8080/api/employee/create", newEmployee);
+            response = await axios.post(`${BASE_URL}/api/employee/create`, newEmployee);
         }
+        CheckResponse(response);
         loadEmployees(branchID);
     };
 
@@ -114,6 +121,7 @@ const AdminEmployee = () => {
                             <th>Phone</th>
                             <th>Email</th>
                             <th>Address</th>
+                            <th>Shift Salary</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -126,6 +134,7 @@ const AdminEmployee = () => {
                                 <td>{employee.phone}</td>
                                 <td>{employee.email}</td>
                                 <td>{employee.address}</td>
+                                <td>{employee.shiftSalary}</td>
                                 <td>
                                     <button className="action-btn" data-bs-toggle="modal" data-bs-target="#employeeModal" onClick={() => handleViewEdit(employee, false)}>
                                         View
@@ -214,6 +223,19 @@ const AdminEmployee = () => {
                                         selectedEmployee
                                             ? setSelectedEmployee({ ...selectedEmployee, address: e.target.value })
                                             : setNewEmployee({ ...newEmployee, address: e.target.value })
+                                    }
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Shift Salary</label>
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    value={selectedEmployee ? selectedEmployee.shiftSalary : newEmployee.shiftSalary}
+                                    onChange={(e) =>
+                                        selectedEmployee
+                                            ? setSelectedEmployee({ ...selectedEmployee, shiftSalary: e.target.value })
+                                            : setNewEmployee({ ...newEmployee, shiftSalary: e.target.value })
                                     }
                                 />
                             </div>

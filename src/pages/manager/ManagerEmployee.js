@@ -42,7 +42,6 @@ const AdminEmployee = () => {
             });
 
             console.log("Employees:", employees);
-
             setEmployees(employees);
         } catch (error) {
             console.error("Failed to load employees:", error);

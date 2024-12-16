@@ -8,7 +8,6 @@ import BASE_URL from "../../config";
 import CheckResponse from "../../api/CheckResponse";
 
 const AdminAccount = () => {
-    
     const [accounts, setAccounts] = useState([]);
     const [branches, setBranches] = useState([]); // Danh sách branch
     const [searchTerm, setSearchTerm] = useState("");
@@ -24,7 +23,7 @@ const AdminAccount = () => {
     const loadAccounts = async () => {
         const result = await axios.get(`${BASE_URL}/api/account/get/all`);
         const accountsData = result.data.data;
-    
+
         // Lấy address cho từng branchID
         const accountsWithBranchAddress = await Promise.all(
             accountsData.map(async (account) => {
@@ -36,7 +35,6 @@ const AdminAccount = () => {
         setAccounts(accountsWithBranchAddress);
     };
     
-
     const loadBranches = async () => {
         const result = await axios.get(`${BASE_URL}/api/branch/get/all`);
         console.log("Result:" + result.data.data);
@@ -74,6 +72,7 @@ const AdminAccount = () => {
             response = await axios.post(`${BASE_URL}/api/account/create`, newAccount);
         }
         CheckResponse(response);
+
         loadAccounts();
     };
 

@@ -271,7 +271,6 @@ const AdminEmployee = () => {
                                     ))}
                                 </select>
                             </div>
-                            
                         </div>
                         <div className="modal-footer">
                             {isEdit || !selectedEmployee ? (

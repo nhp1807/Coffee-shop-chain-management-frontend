@@ -14,7 +14,6 @@ const ImportOrderDetail = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [editingDetail, setEditingDetail] = useState(null);
 
-
     const [importOrder, setImportOrder] = useState({
         importID: "",
         total: 0,
@@ -270,7 +269,6 @@ const ImportOrderDetail = () => {
                         <option value="bank">Bank</option>
                     </select>
                 </div>
-
                 <div className="form-group">
                     <label>Total</label>
                     <input type="number" className="form-control" value={importOrder.total} readOnly />
@@ -320,7 +318,6 @@ const ImportOrderDetail = () => {
                             </tr>
                         )}
                     </tbody>
-
                 </table>
 
                 <button className="action-btn" onClick={() => setShowModal(true)}>

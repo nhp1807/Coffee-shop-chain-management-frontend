@@ -72,8 +72,10 @@ button {
 
 /* CSS cho logo */
 .logo-container {
-  text-align: center;
-  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
 }
 
 .logo {

@@ -104,6 +104,7 @@ const AdminProduct = () => {
                             <th>Description</th>
                             <th>Price</th>
                             <th>Image</th>
+                            <th>Recipe</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -115,6 +116,7 @@ const AdminProduct = () => {
                                 <td>{product.description}</td>
                                 <td>{product.price} VNĐ</td>
                                 <td><img src={product.image} alt={product.name} width="50" /></td>
+                                <td>{product.recipe}</td>
                                 <td>
                                     <button
                                         className="action-btn"

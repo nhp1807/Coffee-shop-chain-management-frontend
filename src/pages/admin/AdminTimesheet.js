@@ -3,13 +3,17 @@ import axios from "axios";
 import "../../assets/styles/AdminObject.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import ManagerSideBar from "../../components/sidebar/ManagerSideBar";
+import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import BASE_URL from "../../config";
+import { Modal, Button, Form } from "react-bootstrap";
 
 const AdminTimesheet = () => {
     const [timesheets, setTimesheets] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [searchQuery, setSearchQuery] = useState(""); // State cho thanh tìm kiếm
+    const [showModal, setShowModal] = useState(false);
+    const [month, setMonth] = useState("");
+    const [year, setYear] = useState("");
 
     useEffect(() => {
         loadTimesheets();
@@ -20,7 +24,6 @@ const AdminTimesheet = () => {
         try {
             const response = await axios.get(`${BASE_URL}/api/timesheet/get/all`);
 
-            // Format date to dd/mm/yyyy HH:mm:ss
             const formattedTimesheets = response.data.data.map((timesheet) => {
                 const date = new Date(timesheet.date);
                 return {
@@ -29,7 +32,6 @@ const AdminTimesheet = () => {
                 };
             });
 
-            // Lấy branchAddress cho từng timesheet
             const timesheetsWithBranchInfo = await Promise.all(
                 formattedTimesheets.map(async (timesheet) => {
                     try {
@@ -72,6 +74,26 @@ const AdminTimesheet = () => {
         setSearchQuery(e.target.value.toLowerCase());
     };
 
+    const handleCalculateSalary = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/api/timesheet/calculate/salary/${month}/${year}`);
+            const salaryData = response.data.data;
+
+            console.log("Salary data:", salaryData);
+
+            // Gửi dữ liệu sang backend để tạo file Excel và gửi email
+            await axios.post(`${BASE_URL}/api/timesheet/send-salary-report`, salaryData);
+
+            alert("Salary reports have been sent to employees' emails.");
+            setMonth("");
+            setYear("");
+            setShowModal(false);
+        } catch (error) {
+            console.error("Failed to calculate salary:", error);
+            alert("Failed to calculate salary. Please try again.");
+        }
+    };
+
     const filteredTimesheets = timesheets.filter((timesheet) => {
         const employeeName = getEmployeeName(timesheet.employeeID).toLowerCase();
         return employeeName.includes(searchQuery);
@@ -79,7 +101,7 @@ const AdminTimesheet = () => {
 
     return (
         <div className="admin-page">
-            <ManagerSideBar />
+            <AdminSideBar />
 
             <div className="content">
                 <div className="header">
@@ -101,6 +123,11 @@ const AdminTimesheet = () => {
                             className="form-control"
                         />
                     </div>
+
+                    {/* Nút Calculate Salary */}
+                    <Button variant="primary" onClick={() => setShowModal(true)}>
+                        Calculate Salary
+                    </Button>
                 </div>
 
                 <table className="table">
@@ -125,6 +152,43 @@ const AdminTimesheet = () => {
                         ))}
                     </tbody>
                 </table>
+
+                {/* Modal */}
+                <Modal show={showModal} onHide={() => setShowModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Calculate Salary</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group>
+                                <Form.Label>Month</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Enter month (1-12)"
+                                    value={month}
+                                    onChange={(e) => setMonth(e.target.value)}
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Year</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Enter year"
+                                    value={year}
+                                    onChange={(e) => setYear(e.target.value)}
+                                />
+                            </Form.Group>
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={() => setShowModal(false)}>
+                            Close
+                        </Button>
+                        <Button variant="primary" onClick={handleCalculateSalary}>
+                            Calculate
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         </div>
     );

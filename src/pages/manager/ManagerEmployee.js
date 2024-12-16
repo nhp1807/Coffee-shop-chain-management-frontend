@@ -19,6 +19,7 @@ const AdminEmployee = () => {
         email: "",
         address: "",
         branchID: "",
+        shiftSalary: 0,
     });
 
     const branchID = localStorage.getItem("branchID"); // Lấy branchID từ localStorage
@@ -39,6 +40,8 @@ const AdminEmployee = () => {
                 const date = new Date(employee.dob);
                 employee.dob = date.toLocaleDateString();
             });
+
+            console.log("Employees:", employees);
 
             setEmployees(employees);
         } catch (error) {
@@ -119,6 +122,7 @@ const AdminEmployee = () => {
                             <th>Phone</th>
                             <th>Email</th>
                             <th>Address</th>
+                            <th>Shift Salary</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -131,6 +135,7 @@ const AdminEmployee = () => {
                                 <td>{employee.phone}</td>
                                 <td>{employee.email}</td>
                                 <td>{employee.address}</td>
+                                <td>{employee.shiftSalary}</td>
                                 <td>
                                     <button className="action-btn" data-bs-toggle="modal" data-bs-target="#employeeModal" onClick={() => handleViewEdit(employee, false)}>
                                         View
@@ -219,6 +224,19 @@ const AdminEmployee = () => {
                                         selectedEmployee
                                             ? setSelectedEmployee({ ...selectedEmployee, address: e.target.value })
                                             : setNewEmployee({ ...newEmployee, address: e.target.value })
+                                    }
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Shift Salary</label>
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    value={selectedEmployee ? selectedEmployee.shiftSalary : newEmployee.shiftSalary}
+                                    onChange={(e) =>
+                                        selectedEmployee
+                                            ? setSelectedEmployee({ ...selectedEmployee, shiftSalary: e.target.value })
+                                            : setNewEmployee({ ...newEmployee, shiftSalary: e.target.value })
                                     }
                                 />
                             </div>

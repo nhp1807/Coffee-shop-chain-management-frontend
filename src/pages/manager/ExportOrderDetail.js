@@ -13,6 +13,7 @@ const ExportOrderDetail = () => {
     const navigate = useNavigate();
     const [showEditModal, setShowEditModal] = useState(false);
     const [editingDetail, setEditingDetail] = useState(null);
+    const branchID = localStorage.getItem("branchID"); // Lấy branchID từ localStorage
 
 
     const [exportOrder, setExportOrder] = useState({
@@ -65,7 +66,7 @@ const ExportOrderDetail = () => {
     const loadEmployeesAndBranches = async () => {
         try {
             const [employeesRes, branchesRes] = await Promise.all([
-                axios.get(`${BASE_URL}/api/employee/get/all`),
+                axios.get(`${BASE_URL}/api/employee/get/branch/${branchID}`),
                 axios.get(`${BASE_URL}/api/branch/get/all`),
             ]);
 

@@ -17,6 +17,7 @@ const ProductDetail = () => {
         description: "",
         price: 0,
         image: "",
+        recipe: "",
         productMaterials: [], // List of product materials
     });
     const [materials, setMaterials] = useState([]); // Material list from API
@@ -77,6 +78,7 @@ const ProductDetail = () => {
             setProduct(updatedProductResponse.data.data);  // Cập nhật lại sản phẩm với danh sách vật liệu mới
     
             setShowModal(false); // Đóng modal
+            setNewProductMaterial({ materialID: "", quantity: 0 }); // Reset form thêm mới
         } catch (error) {
             console.error("Error adding material:", error);
         }
@@ -145,6 +147,15 @@ const ProductDetail = () => {
                         className="form-control"
                         value={product.image || ""}
                         onChange={(e) => setProduct({ ...product, image: e.target.value })}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>Recipe</label>
+                    <textarea
+                        className="form-control"
+                        value={product.recipe || ""}
+                        onChange={(e) => setProduct({ ...product, recipe: e.target.value })}
                     />
                 </div>
 

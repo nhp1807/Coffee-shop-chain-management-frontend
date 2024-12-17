@@ -102,10 +102,10 @@ const AdminProduct = () => {
                             <th>#</th>
                             <th>Name</th>
                             <th>Description</th>
-                            <th>Price</th>
-                            <th>Image</th>
+                            <th className="price-column">Price</th>
+                            <th className="image-column">Image</th>
                             <th>Recipe</th>
-                            <th>Actions</th>
+                            <th className="actions-column">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -114,10 +114,10 @@ const AdminProduct = () => {
                                 <td>{index + 1}</td>
                                 <td>{product.name}</td>
                                 <td>{product.description}</td>
-                                <td>{product.price} VNĐ</td>
-                                <td><img src={product.image} alt={product.name} width="50" /></td>
+                                <td className="price-column">{product.price} VNĐ</td>
+                                <td className="image-column"><img src={product.image} alt={product.name} width="100" /></td>
                                 <td>{product.recipe}</td>
-                                <td>
+                                <td className="actions-column">
                                     <button
                                         className="action-btn"
                                         onClick={() => handleViewEditProduct(product.productID)}

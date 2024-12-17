@@ -137,3 +137,15 @@ i {
     font-size: 14px;
     width: 350px;
 }
+
+.actions-column {
+    width: 200px; /* Bạn có thể thay đổi giá trị này tùy theo nhu cầu */
+}
+
+.price-column {
+    width: 110px; /* Bạn có thể thay đổi giá trị này tùy theo nhu cầu */
+}
+
+.image-column {
+    width: 100px; /* Bạn có thể thay đổi giá trị này tùy theo nhu cầu */
+}

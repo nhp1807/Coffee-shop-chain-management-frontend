@@ -3,6 +3,7 @@ import axios from "axios";
 import ManagerSideBar from "../../components/sidebar/ManagerSideBar";
 import { BASE_URL, BASE_URL_FRONTEND } from "../../config";
 import "../../assets/styles/Statistic.css";
+import { Modal, Button, Form } from 'react-bootstrap';
 
 const ManagerHome = () => {
     const [dashboardData, setDashboardData] = useState(null);
@@ -12,6 +13,9 @@ const ManagerHome = () => {
     const [showBranchStats, setShowBranchStats] = useState(false);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
+    const [showExportModal, setShowExportModal] = useState(false);
+    const [exportMonth, setExportMonth] = useState("");
+    const [exportYear, setExportYear] = useState("");
 
     const fetchDashboardData = async () => {
         try {
@@ -29,6 +33,20 @@ const ManagerHome = () => {
         }
         if (showBranchStats) {
             // fetchBranchStats();
+        }
+    };
+
+    const handleExportData = async () => {
+        try {
+            const branchID = localStorage.getItem("branchID");
+            await axios.get(`${BASE_URL}/api/export-order/export/${exportMonth}/${exportYear}?branchID=${branchID}`);
+            alert("The data has been sent to your email.");
+            setExportMonth("");
+            setExportYear("");
+            setShowExportModal(false);
+        } catch (error) {
+            console.error("Failed to export data:", error);
+            alert("Failed to export data. Please try again.");
         }
     };
 
@@ -72,6 +90,7 @@ const ManagerHome = () => {
                         />
                     </div>
                     <button onClick={handleDateChange}>Apply Filter</button>
+                    <button onClick={() => setShowExportModal(true)}>Export Data</button>
                 </div>
 
                 <div className="dashboard-grid">
@@ -105,6 +124,45 @@ const ManagerHome = () => {
                         <h3>Total Revenue</h3>
                         <p>${dashboardData.totalRevenue}</p>
                     </div>
+
+                    {/* Thêm Modal Export Data (đặt ở cuối, trước thẻ đóng div cuối cùng) */}
+                    <Modal show={showExportModal} onHide={() => setShowExportModal(false)}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Export Data</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <Form>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Month</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        placeholder="Enter month (1-12)"
+                                        value={exportMonth}
+                                        onChange={(e) => setExportMonth(e.target.value)}
+                                        min="1"
+                                        max="12"
+                                    />
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label>Year</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        placeholder="Enter year"
+                                        value={exportYear}
+                                        onChange={(e) => setExportYear(e.target.value)}
+                                    />
+                                </Form.Group>
+                            </Form>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={() => setShowExportModal(false)}>
+                                Close
+                            </Button>
+                            <Button variant="primary" onClick={handleExportData}>
+                                Export
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
                 </div>
             </div>
         </div>

@@ -31,6 +31,9 @@ const Timesheet = () => {
                 timesheet.date = date.toLocaleString();
             });
 
+            // sort timesheets by date in descending order
+            response.data.data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
             setTimesheets(response.data.data);
         } catch (error) {
             console.error("Failed to load timesheets:", error);

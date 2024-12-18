@@ -4,7 +4,7 @@ import "../../assets/styles/AdminObject.css"; // Sử dụng lại CSS của Adm
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
-import BASE_URL from "../../config";
+import {BASE_URL} from "../../config";
 import CheckResponse from "../../api/CheckResponse";
 
 const AdminAccount = () => {
@@ -125,13 +125,13 @@ const AdminAccount = () => {
                                 <td>{account.email}</td>
                                 <td>{account.branchAddress || "N/A"}</td> {/* Hiển thị branchName */}
                                 <td>
-                                    <button className="action-btn" data-bs-toggle="modal" data-bs-target="#accountModal" onClick={() => handleViewEdit(account, false)}>
+                                    <button className="action-btn view" data-bs-toggle="modal" data-bs-target="#accountModal" onClick={() => handleViewEdit(account, false)}>
                                         View
                                     </button>
-                                    <button className="action-btn" data-bs-toggle="modal" data-bs-target="#accountModal" onClick={() => handleViewEdit(account, true)}>
+                                    <button className="action-btn edit" data-bs-toggle="modal" data-bs-target="#accountModal" onClick={() => handleViewEdit(account, true)}>
                                         Edit
                                     </button>
-                                    <button onClick={() => deleteAccount(account.accountID)} className="action-btn">Delete</button>
+                                    <button onClick={() => deleteAccount(account.accountID)} className="action-btn delete">Delete</button>
                                 </td>
                             </tr>
                         ))}

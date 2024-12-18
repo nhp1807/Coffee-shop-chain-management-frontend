@@ -5,7 +5,7 @@ import AdminSideBar from "../../components/sidebar/AdminSideBar"; // Sidebar
 import "../../assets/styles/AdminObject.css"; // CSS Style
 import "../../assets/styles/Suggestion.css";
 import { Modal } from "react-bootstrap";
-import BASE_URL from "../../config";
+import {BASE_URL} from "../../config";
 import CheckResponse from "../../api/CheckResponse";
 
 const ImportOrderDetail = () => {

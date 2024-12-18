@@ -3,7 +3,7 @@ import axios from "axios";
 import "../../assets/styles/AdminObject.css";
 import ManagerSideBar from "../../components/sidebar/ManagerSideBar";
 import { useNavigate } from "react-router-dom";
-import BASE_URL from "../../config";
+import {BASE_URL} from "../../config";
 import CheckResponse from "../../api/CheckResponse";
 
 const ExportOrder = () => {
@@ -108,7 +108,7 @@ const ExportOrder = () => {
                                 <td>{order.total} VNĐ</td>
                                 <td>
                                     <button
-                                        className="action-btn"
+                                        className="action-btn view"
                                         onClick={() => handleViewEditOrder(order.exportID)}
                                     >
                                         View/Edit

@@ -4,7 +4,7 @@ import "../../assets/styles/AdminObject.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
-import BASE_URL from "../../config";
+import {BASE_URL} from "../../config";
 import CheckResponse from "../../api/CheckResponse";
 
 const AdminMaterial = () => {
@@ -106,7 +106,7 @@ const AdminMaterial = () => {
                                 <td>{material.name}</td>
                                 <td>
                                     <button
-                                        className="action-btn"
+                                        className="action-btn view"
                                         data-bs-toggle="modal"
                                         data-bs-target="#materialModal"
                                         onClick={() => handleViewEdit(material, false)}
@@ -114,14 +114,14 @@ const AdminMaterial = () => {
                                         View
                                     </button>
                                     <button
-                                        className="action-btn"
+                                        className="action-btn edit"
                                         data-bs-toggle="modal"
                                         data-bs-target="#materialModal"
                                         onClick={() => handleViewEdit(material, true)}
                                     >
                                         Edit
                                     </button>
-                                    <button onClick={() => deleteMaterial(material.materialID)} className="action-btn">
+                                    <button onClick={() => deleteMaterial(material.materialID)} className="action-btn delete">
                                         Delete
                                     </button>
                                 </td>

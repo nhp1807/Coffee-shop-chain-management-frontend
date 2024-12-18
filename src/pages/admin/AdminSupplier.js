@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
-import BASE_URL from "../../config";
+import {BASE_URL} from "../../config";
 import CheckResponse from "../../api/CheckResponse";
 
 const AdminSupplier = () => {
@@ -99,13 +99,13 @@ const AdminSupplier = () => {
                                 <td>{supplier.phone}</td>
                                 <td>{supplier.address}</td>
                                 <td>
-                                    <button className="action-btn" data-bs-toggle="modal" data-bs-target="#supplierModal" onClick={() => handleViewEdit(supplier, false)}>
+                                    <button className="action-btn view" data-bs-toggle="modal" data-bs-target="#supplierModal" onClick={() => handleViewEdit(supplier, false)}>
                                         View
                                     </button>
-                                    <button className="action-btn" data-bs-toggle="modal" data-bs-target="#supplierModal" onClick={() => handleViewEdit(supplier, true)}>
+                                    <button className="action-btn edit" data-bs-toggle="modal" data-bs-target="#supplierModal" onClick={() => handleViewEdit(supplier, true)}>
                                         Edit
                                     </button>
-                                    <button onClick={() => deleteSupplier(supplier.supplierID)} className="action-btn">Delete</button>
+                                    <button onClick={() => deleteSupplier(supplier.supplierID)} className="action-btn delete">Delete</button>
                                 </td>
                             </tr>
                         ))}

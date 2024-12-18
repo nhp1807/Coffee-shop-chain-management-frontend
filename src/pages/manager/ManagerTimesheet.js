@@ -4,7 +4,7 @@ import "../../assets/styles/AdminObject.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import ManagerSideBar from "../../components/sidebar/ManagerSideBar";
-import BASE_URL from "../../config";
+import {BASE_URL} from "../../config";
 
 const Timesheet = () => {
     const [timesheets, setTimesheets] = useState([]);

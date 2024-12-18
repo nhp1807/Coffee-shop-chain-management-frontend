@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import AdminSideBar from "../../components/sidebar/AdminSideBar"; // Sidebar
 import "../../assets/styles/AdminObject.css"; // CSS Style
 import { Modal } from "react-bootstrap";
-import BASE_URL from "../../config";
+import {BASE_URL} from "../../config";
 import CheckResponse from "../../api/CheckResponse";
 
 const ProductDetail = () => {
@@ -177,7 +177,7 @@ const ProductDetail = () => {
                                     <td>{pm.quantity}</td>
                                     <td>
                                         <button
-                                            className="action-btn"
+                                            className="action-btn delete"
                                             onClick={() => handleDeleteMaterial(pm.materialID)}
                                         >
                                             Delete
@@ -195,10 +195,10 @@ const ProductDetail = () => {
                     </tbody>
                 </table>
 
-                <button className="action-btn" onClick={() => setShowModal(true)}>
+                <button className="action-btn edit" onClick={() => setShowModal(true)}>
                     Add Material
                 </button>
-                <button className="action-btn" onClick={handleSave}>
+                <button className="action-btn view" onClick={handleSave}>
                     Save
                 </button>
 
@@ -235,10 +235,10 @@ const ProductDetail = () => {
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <button className="action-btn" onClick={addProductMaterial}>
+                        <button className="btn btn-primary" onClick={addProductMaterial}>
                             Add Material
                         </button>
-                        <button className="action-btn" onClick={() => setShowModal(false)}>
+                        <button className="btn btn-secondary" onClick={() => setShowModal(false)}>
                             Close
                         </button>
                     </Modal.Footer>

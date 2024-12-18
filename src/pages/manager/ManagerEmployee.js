@@ -4,7 +4,7 @@ import "../../assets/styles/AdminObject.css"; // Sử dụng lại CSS của Adm
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import ManagerSideBar from "../../components/sidebar/ManagerSideBar";
-import BASE_URL from "../../config";
+import {BASE_URL} from "../../config";
 import CheckResponse from "../../api/CheckResponse";
 
 const AdminEmployee = () => {
@@ -136,13 +136,13 @@ const AdminEmployee = () => {
                                 <td>{employee.address}</td>
                                 <td>{employee.shiftSalary}</td>
                                 <td>
-                                    <button className="action-btn" data-bs-toggle="modal" data-bs-target="#employeeModal" onClick={() => handleViewEdit(employee, false)}>
+                                    <button className="action-btn view" data-bs-toggle="modal" data-bs-target="#employeeModal" onClick={() => handleViewEdit(employee, false)}>
                                         View
                                     </button>
-                                    <button className="action-btn" data-bs-toggle="modal" data-bs-target="#employeeModal" onClick={() => handleViewEdit(employee, true)}>
+                                    <button className="action-btn edit" data-bs-toggle="modal" data-bs-target="#employeeModal" onClick={() => handleViewEdit(employee, true)}>
                                         Edit
                                     </button>
-                                    <button onClick={() => deleteEmployee(employee.employeeID)} className="action-btn">Delete</button>
+                                    <button onClick={() => deleteEmployee(employee.employeeID)} className="action-btn delete">Delete</button>
                                 </td>
                             </tr>
                         ))}

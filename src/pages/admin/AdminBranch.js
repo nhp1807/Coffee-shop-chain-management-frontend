@@ -4,7 +4,7 @@ import "../../assets/styles/AdminObject.css"; // CSS riêng cho Branch
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
-import BASE_URL from "../../config";
+import {BASE_URL} from "../../config";
 
 import CheckResponse from "../../api/CheckResponse";
 
@@ -100,13 +100,13 @@ const AdminBranch = () => {
                                 <td>{branch.phone}</td>
                                 <td>{branch.fax}</td>
                                 <td>
-                                    <button className="action-btn" data-bs-toggle="modal" data-bs-target="#branchModal" onClick={() => handleViewEdit(branch, false)}>
+                                    <button className="action-btn view" data-bs-toggle="modal" data-bs-target="#branchModal" onClick={() => handleViewEdit(branch, false)}>
                                         View
                                     </button>
-                                    <button className="action-btn" data-bs-toggle="modal" data-bs-target="#branchModal" onClick={() => handleViewEdit(branch, true)}>
+                                    <button className="action-btn edit" data-bs-toggle="modal" data-bs-target="#branchModal" onClick={() => handleViewEdit(branch, true)}>
                                         Edit
                                     </button>
-                                    <button onClick={() => deleteBranch(branch.branchID)} className="action-btn">Delete</button>
+                                    <button onClick={() => deleteBranch(branch.branchID)} className="action-btn delete">Delete</button>
                                 </td>
                             </tr>
                         ))}

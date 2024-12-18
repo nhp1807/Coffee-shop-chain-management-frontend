@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import { useNavigate } from "react-router-dom";
-import BASE_URL from "../../config";
+import {BASE_URL} from "../../config";
 
 const AdminStorage = () => {
     const [storages, setStorages] = useState([]);

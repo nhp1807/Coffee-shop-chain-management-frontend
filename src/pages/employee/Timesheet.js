@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../../App.css';
-import BASE_URL from '../../config';
+import {BASE_URL} from '../../config';
 import CheckResponse from '../../api/CheckResponse';
 
 const Timesheet = () => {

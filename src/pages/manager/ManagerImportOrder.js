@@ -3,7 +3,7 @@ import axios from "axios";
 import "../../assets/styles/AdminObject.css";
 import ManagerSideBar from "../../components/sidebar/ManagerSideBar";
 import { useNavigate } from "react-router-dom";
-import BASE_URL from "../../config";
+import {BASE_URL} from "../../config";
 import CheckResponse from "../../api/CheckResponse";
 
 const ManagerImportOrder = () => {
@@ -115,7 +115,7 @@ const ManagerImportOrder = () => {
                                 <td>{order.status || "Pending"}</td>
                                 <td>
                                     <button
-                                        className="action-btn"
+                                        className="action-btn edit"
                                         onClick={() => handleViewEditOrder(order.importID)}
                                     >
                                         View/Edit

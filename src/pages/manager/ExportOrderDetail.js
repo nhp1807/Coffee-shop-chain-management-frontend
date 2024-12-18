@@ -5,7 +5,7 @@ import ManagerSideBar from "../../components/sidebar/ManagerSideBar"; // Sidebar
 import "../../assets/styles/AdminObject.css"; // CSS Style
 import "../../assets/styles/Suggestion.css";
 import { Modal } from "react-bootstrap";
-import BASE_URL from "../../config";
+import {BASE_URL} from "../../config";
 import CheckResponse from "../../api/CheckResponse";
 
 const ExportOrderDetail = () => {
@@ -300,13 +300,13 @@ const ExportOrderDetail = () => {
                                     <td>{detail?.description}</td>
                                     <td>
                                         <button
-                                            className="action-btn"
+                                            className="action-btn edit"
                                             onClick={() => handleEditDetail(detail.productID)}
                                         >
                                             Edit
                                         </button>
                                         <button
-                                            className="action-btn"
+                                            className="action-btn delete"
                                             onClick={() => handleDeleteDetail(detail.productID)}
                                         >
                                             Delete
@@ -325,10 +325,10 @@ const ExportOrderDetail = () => {
 
                 </table>
 
-                <button className="action-btn" onClick={() => setShowModal(true)}>
+                <button className="action-btn edit" onClick={() => setShowModal(true)}>
                     Add Detail
                 </button>
-                <button className="action-btn" onClick={handleSave}>
+                <button className="action-btn view" onClick={handleSave}>
                     Save
                 </button>
 
@@ -398,10 +398,10 @@ const ExportOrderDetail = () => {
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <button className="action-btn" onClick={() => setShowModal(false)}>
+                        <button className="btn btn-secondary" onClick={() => setShowModal(false)}>
                             Close
                         </button>
-                        <button className="action-btn" onClick={addDetail}>
+                        <button className="btn btn-primary" onClick={addDetail}>
                             Add Detail
                         </button>
                     </Modal.Footer>
@@ -443,10 +443,10 @@ const ExportOrderDetail = () => {
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <button className="action-btn" onClick={() => setShowEditModal(false)}>
+                        <button className="btn btn-secondary" onClick={() => setShowEditModal(false)}>
                             Close
                         </button>
-                        <button className="action-btn" onClick={updateDetail}>
+                        <button className="btn btn-primary" onClick={updateDetail}>
                             Save Changes
                         </button>
                     </Modal.Footer>

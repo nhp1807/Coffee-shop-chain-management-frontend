@@ -79,7 +79,6 @@ const ManagerStorage = () => {
                             <th>#</th>
                             <th>Material</th>
                             <th>Quantity</th>
-                            <th>Branch ID</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -88,7 +87,6 @@ const ManagerStorage = () => {
                                 <td>{index + 1}</td>
                                 <td>{storage.materialName}</td>
                                 <td>{storage.quantity}</td>
-                                <td>{storage.branchID}</td>
                             </tr>
                         ))}
                     </tbody>

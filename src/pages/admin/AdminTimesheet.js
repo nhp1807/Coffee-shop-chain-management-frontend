@@ -23,15 +23,16 @@ const AdminTimesheet = () => {
     const loadTimesheets = async () => {
         try {
             const response = await axios.get(`${BASE_URL}/api/timesheet/get/all`);
-
+    
             const formattedTimesheets = response.data.data.map((timesheet) => {
                 const date = new Date(timesheet.date);
                 return {
                     ...timesheet,
                     date: date.toLocaleString(),
+                    rawDate: date, // Add this for sorting
                 };
             });
-
+    
             const timesheetsWithBranchInfo = await Promise.all(
                 formattedTimesheets.map(async (timesheet) => {
                     try {
@@ -49,8 +50,13 @@ const AdminTimesheet = () => {
                     }
                 })
             );
-
-            setTimesheets(timesheetsWithBranchInfo);
+    
+            // Sort timesheets by date in descending order
+            const sortedTimesheets = timesheetsWithBranchInfo.sort((a, b) => 
+                b.rawDate - a.rawDate
+            );
+    
+            setTimesheets(sortedTimesheets);
         } catch (error) {
             console.error("Failed to load timesheets:", error);
         }

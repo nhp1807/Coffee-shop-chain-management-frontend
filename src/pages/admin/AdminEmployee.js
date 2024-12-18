@@ -4,7 +4,7 @@ import "../../assets/styles/AdminObject.css"; // Sử dụng lại CSS của Adm
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
-import {BASE_URL} from "../../config";
+import { BASE_URL } from "../../config";
 import CheckResponse from "../../api/CheckResponse";
 
 const AdminEmployee = () => {
@@ -66,8 +66,18 @@ const AdminEmployee = () => {
     };
 
     const handleViewEdit = (employee, isEditMode) => {
-        setSelectedEmployee(employee);
+        // Format lại date trước khi set vào state
+        const formattedEmployee = {
+            ...employee,
+            dob: formatDateForInput(employee.dob)
+        };
+        setSelectedEmployee(formattedEmployee);
         setIsEdit(isEditMode);
+    };
+
+    const formatDateForInput = (dateString) => {
+        const date = new Date(dateString);
+        return date.toISOString().split('T')[0];  // Returns YYYY-MM-DD
     };
 
     const handleAddEmployee = () => {
@@ -86,6 +96,7 @@ const AdminEmployee = () => {
     const saveEmployee = async () => {
         var respone;
         if (isEdit && selectedEmployee) {
+            console.log("selectedEmployee", selectedEmployee.employeeID);
             respone = await axios.put(`${BASE_URL}/api/employee/update/${selectedEmployee.employeeID}`, selectedEmployee);
         } else {
             respone = await axios.post(`${BASE_URL}/api/employee/create`, newEmployee);

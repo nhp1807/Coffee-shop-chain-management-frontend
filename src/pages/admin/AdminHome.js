@@ -3,6 +3,7 @@ import axios from "axios";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import { BASE_URL, BASE_URL_FRONTEND } from "../../config";
 import "../../assets/styles/Statistic.css";
+import { Modal, Button, Form } from 'react-bootstrap';
 
 const AdminHome = () => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -12,6 +13,9 @@ const AdminHome = () => {
   const [showBranchStats, setShowBranchStats] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [exportMonth, setExportMonth] = useState("");
+  const [exportYear, setExportYear] = useState("");
 
   const fetchDashboardData = async () => {
     try {
@@ -71,6 +75,19 @@ const AdminHome = () => {
     }
   };
 
+  const handleExportData = async () => {
+    try {
+      await axios.get(`${BASE_URL}/api/export-order/export/${exportMonth}/${exportYear}`);
+      alert("The data has been sent to your email.");
+      setExportMonth("");
+      setExportYear("");
+      setShowExportModal(false);
+    } catch (error) {
+      console.error("Failed to export data:", error);
+      alert("Failed to export data. Please try again.");
+    }
+  };
+
   useEffect(() => {
     fetchDashboardData();
   }, []);
@@ -91,7 +108,7 @@ const AdminHome = () => {
       <AdminSideBar />
       <div className="content">
         <h2>Dashboard</h2>
-        
+
         {/* Date Filter Section */}
         <div className="date-filter">
           <div className="date-input-group">
@@ -111,12 +128,13 @@ const AdminHome = () => {
             />
           </div>
           <button onClick={handleDateChange}>Apply Filter</button>
+          <button onClick={() => setShowExportModal(true)}>Export Data</button>
         </div>
 
         <div className="dashboard-grid">
           {/* Branch Card */}
-          <div 
-            className="dashboard-card" 
+          <div
+            className="dashboard-card"
             onClick={handleBranchCardClick}
             style={{ cursor: 'pointer' }}
           >
@@ -133,8 +151,8 @@ const AdminHome = () => {
           </a>
 
           {/* Product Card */}
-          <div 
-            className="dashboard-card" 
+          <div
+            className="dashboard-card"
             onClick={handleProductCardClick}
             style={{ cursor: 'pointer' }}
           >
@@ -254,6 +272,45 @@ const AdminHome = () => {
             </table>
           </div>
         )}
+
+        {/* Thêm Modal Export Data (đặt ở cuối, trước thẻ đóng div cuối cùng) */}
+        <Modal show={showExportModal} onHide={() => setShowExportModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Export Data</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group className="mb-3">
+                <Form.Label>Month</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Enter month (1-12)"
+                  value={exportMonth}
+                  onChange={(e) => setExportMonth(e.target.value)}
+                  min="1"
+                  max="12"
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Year</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Enter year"
+                  value={exportYear}
+                  onChange={(e) => setExportYear(e.target.value)}
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowExportModal(false)}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleExportData}>
+              Export
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </div>
   );

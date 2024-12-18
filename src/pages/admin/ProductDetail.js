@@ -17,6 +17,7 @@ const ProductDetail = () => {
         description: "",
         price: 0,
         image: "",
+        recipe: "",
         productMaterials: [], // List of product materials
     });
     const [materials, setMaterials] = useState([]); // Material list from API
@@ -77,6 +78,7 @@ const ProductDetail = () => {
             setProduct(updatedProductResponse.data.data);  // Cập nhật lại sản phẩm với danh sách vật liệu mới
     
             setShowModal(false); // Đóng modal
+            setNewProductMaterial({ materialID: "", quantity: 0 }); // Reset form thêm mới
         } catch (error) {
             console.error("Error adding material:", error);
         }
@@ -115,7 +117,7 @@ const ProductDetail = () => {
                         type="text"
                         className="form-control"
                         value={product.name || ""}
-                        onChange={(e) => setProduct({ ...product, name: e.target.value })}
+                        onChange={(e) => setProduct({...product, name: e.target.value})}
                     />
                 </div>
 
@@ -124,7 +126,7 @@ const ProductDetail = () => {
                     <textarea
                         className="form-control"
                         value={product.description || ""}
-                        onChange={(e) => setProduct({ ...product, description: e.target.value })}
+                        onChange={(e) => setProduct({...product, description: e.target.value})}
                     />
                 </div>
 
@@ -134,7 +136,7 @@ const ProductDetail = () => {
                         type="number"
                         className="form-control"
                         value={product.price || 0}
-                        onChange={(e) => setProduct({ ...product, price: e.target.value })}
+                        onChange={(e) => setProduct({...product, price: e.target.value})}
                     />
                 </div>
 
@@ -144,7 +146,16 @@ const ProductDetail = () => {
                         type="text"
                         className="form-control"
                         value={product.image || ""}
-                        onChange={(e) => setProduct({ ...product, image: e.target.value })}
+                        onChange={(e) => setProduct({...product, image: e.target.value})}
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>Recipe</label>
+                    <textarea
+                        className="form-control"
+                        value={product.recipe || ""}
+                        onChange={(e) => setProduct({...product, recipe: e.target.value})}
                     />
                 </div>
 
@@ -152,35 +163,35 @@ const ProductDetail = () => {
                 <h3>Product Materials</h3>
                 <table className="table">
                     <thead>
-                        <tr>
-                            <th>Material</th>
-                            <th>Quantity</th>
-                            <th>Action</th>
-                        </tr>
+                    <tr>
+                        <th>Material</th>
+                        <th>Quantity</th>
+                        <th>Action</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {product.productMaterials.length > 0 ? (
-                            product.productMaterials.map((pm, index) => (
-                                <tr key={index}>
-                                    <td>{pm.materialName || "Unknown Material"}</td>
-                                    <td>{pm.quantity}</td>
-                                    <td>
-                                        <button
-                                            className="action-btn"
-                                            onClick={() => handleDeleteMaterial(pm.materialID)}
-                                        >
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="3" style={{ textAlign: "center" }}>
-                                    No materials added
+                    {product.productMaterials.length > 0 ? (
+                        product.productMaterials.map((pm, index) => (
+                            <tr key={index}>
+                                <td>{pm.materialName || "Unknown Material"}</td>
+                                <td>{pm.quantity}</td>
+                                <td>
+                                    <button
+                                        className="action-btn"
+                                        onClick={() => handleDeleteMaterial(pm.materialID)}
+                                    >
+                                        Delete
+                                    </button>
                                 </td>
                             </tr>
-                        )}
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="3" style={{textAlign: "center"}}>
+                                No materials added
+                            </td>
+                        </tr>
+                    )}
                     </tbody>
                 </table>
 
@@ -219,7 +230,7 @@ const ProductDetail = () => {
                                 type="number"
                                 className="form-control"
                                 value={newProductMaterial.quantity}
-                                onChange={(e) => setNewProductMaterial({ ...newProductMaterial, quantity: e.target.value })}
+                                onChange={(e) => setNewProductMaterial({ ...newProductMaterial,  quantity: e.target.value })}
                             />
                         </div>
                     </Modal.Body>

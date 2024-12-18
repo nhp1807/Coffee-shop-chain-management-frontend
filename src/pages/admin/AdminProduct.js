@@ -98,41 +98,41 @@ const AdminProduct = () => {
 
                 <table className="table">
                     <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Image</th>
-                            <th>Recipe</th>
-                            <th>Actions</th>
-                        </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th className="price-column">Price</th>
+                        <th className="image-column">Image</th>
+                        <th>Recipe</th>
+                        <th className="actions-column">Actions</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {filteredProducts.map((product, index) => (
-                            <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td>{product.name}</td>
-                                <td>{product.description}</td>
-                                <td>{product.price} VNĐ</td>
-                                <td><img src={product.image} alt={product.name} width="50" /></td>
-                                <td>{product.recipe}</td>
-                                <td>
-                                    <button
-                                        className="action-btn"
-                                        onClick={() => handleViewEditProduct(product.productID)}
-                                    >
-                                        View/Edit
-                                    </button>
-                                    <button
-                                        className="action-btn"
-                                        onClick={() => handleDeleteProduct(product.productID)}
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
+                    {filteredProducts.map((product, index) => (
+                        <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>{product.name}</td>
+                            <td>{product.description}</td>
+                            <td className="price-column">{product.price} VNĐ</td>
+                            <td className="image-column"><img src={product.image} alt={product.name} width="100"/></td>
+                            <td>{product.recipe}</td>
+                            <td className="actions-column">
+                                <button
+                                    className="action-btn"
+                                    onClick={() => handleViewEditProduct(product.productID)}
+                                >
+                                    View/Edit
+                                </button>
+                                <button
+                                    className="action-btn"
+                                    onClick={() => handleDeleteProduct(product.productID)}
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
                     </tbody>
                 </table>
             </div>

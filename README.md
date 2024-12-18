@@ -1,70 +1,71 @@
-# Getting Started with Create React App
+# Coffee shop chain management
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## ☕️ Overview
 
-## Available Scripts
+The coffee shop chain management system helps to conveniently manage coffee shops, providing basic functions to meet practical operations. The system helps administrators control stores, managers of each store, employees and information about coffee and raw materials.
 
-In the project directory, you can run:
+## 📌 Installation instructions on local machine
 
-### `npm start`
+### 1. Backend
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Clone the repository
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+git clone https://github.com/nhp1807/Coffee-shop-chain-management-backend.git
+```
 
-### `npm test`
+- Open the project in your IDE and run the project
+- The backend will run on port 8080
+- You can access the API documentation at `http://localhost:8080/swagger-ui.html`
+- The database configuration is in the `application.properties` file
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 2. Frontend
 
-### `npm run build`
+- Clone the repository
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+git clone https://github.com/nhp1807/Coffee-shop-chain-management-frontend.git
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Open the project in your IDE and run the project using the command
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm start
+```
 
-### `npm run eject`
+- The frontend will run on port 3000
+- You can access the website at `http://localhost:3000`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 📌 Running the project
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- The project is deployed on Render and GitHub pages, you can access the website at `https://nhp1807.github.io/Coffee-shop-chain-management-frontend/`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 📣 Features
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- Manage goods import for each branch
+- Manage human resources for the entire chain of stores and each specific branch
+- Manage the list of products in the menu
+- Authentication of users using the system
+- Registration system and account authentication via OTP code
+- Simplify the employee timekeeping process via Telegram bot system and email
 
-## Learn More
+## 🛠 Technologies
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Programming language: Java version 21
+- Restful API: Spring Boot version 2.5.4
+- Database: MySQL version 8.0.26
+- Maven: version 3.8.2
+- Telegram bot: Telegram Bot API
+- Email: JavaMail API
+- ReactJS: version 17.0.2
+- Bootstrap: version 5.1.0
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 🧑‍🎓 Members
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+| No. | Name                   | ID       | Email                           |
+|-----|------------------------|----------|---------------------------------|
+| 1   | Nguyễn Hải Phong       | 20207624 | phong.nh207624@sis.hust.edu.vn  |
+| 2   | Nguyễn Thị Vân Anh     | 20200035 | anh.ntv200035@sis.hust.edu.vn   |
+| 3   | Nguyễn Quang Huy Hoàng | 20207605 | hoang.nqh207605@sis.hust.edu.vn |
+| 4   | Nguyễn Đức Tú          | 20207638 | tu.nd207638@sis.hust.edu.vn     |

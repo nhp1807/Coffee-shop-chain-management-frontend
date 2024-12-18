@@ -7,6 +7,8 @@ import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import BASE_URL from "../../config";
 import CheckResponse from "../../api/CheckResponse";
 
+import CheckResponse from "../../api/CheckResponse";
+
 const AdminBranch = () => {
 
     const [branches, setBranches] = useState([]);
@@ -83,32 +85,32 @@ const AdminBranch = () => {
 
                 <table className="table">
                     <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Address</th>
-                        <th>Phone</th>
-                        <th>Fax</th>
-                        <th>Actions</th>
-                    </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Address</th>
+                            <th>Phone</th>
+                            <th>Fax</th>
+                            <th>Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {filteredBranches.map((branch, index) => (
-                        <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{branch.address}</td>
-                            <td>{branch.phone}</td>
-                            <td>{branch.fax}</td>
-                            <td>
-                                <button className="action-btn" data-bs-toggle="modal" data-bs-target="#branchModal" onClick={() => handleViewEdit(branch, false)}>
-                                    View
-                                </button>
-                                <button className="action-btn" data-bs-toggle="modal" data-bs-target="#branchModal" onClick={() => handleViewEdit(branch, true)}>
-                                    Edit
-                                </button>
-                                <button onClick={() => deleteBranch(branch.branchID)} className="action-btn">Delete</button>
-                            </td>
-                        </tr>
-                    ))}
+                        {filteredBranches.map((branch, index) => (
+                            <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{branch.address}</td>
+                                <td>{branch.phone}</td>
+                                <td>{branch.fax}</td>
+                                <td>
+                                    <button className="action-btn" data-bs-toggle="modal" data-bs-target="#branchModal" onClick={() => handleViewEdit(branch, false)}>
+                                        View
+                                    </button>
+                                    <button className="action-btn" data-bs-toggle="modal" data-bs-target="#branchModal" onClick={() => handleViewEdit(branch, true)}>
+                                        Edit
+                                    </button>
+                                    <button onClick={() => deleteBranch(branch.branchID)} className="action-btn">Delete</button>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>

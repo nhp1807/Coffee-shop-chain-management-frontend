@@ -4,6 +4,8 @@ import "../../assets/styles/AdminObject.css"; // Sử dụng lại CSS của Adm
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
+import BASE_URL from "../../config";
+import CheckResponse from "../../api/CheckResponse";
 
 const AdminEmployee = () => {
     const [employees, setEmployees] = useState([]);
@@ -18,25 +20,21 @@ const AdminEmployee = () => {
         email: "",
         address: "",
         branchID: "",
+        shiftSalary: "",
     });
 
     useEffect(() => {
         loadEmployees();
-        loadbranchs(); 
+        loadbranchs();
     }, []);
 
-    // const loadEmployees = async () => {
-    //     const result = await axios.get("http://localhost:8080/api/employee/get/all");
-    //     setEmployees(result.data.data);
-    // };
-
     const loadEmployees = async () => {
-        const employeeResult = await axios.get("http://localhost:8080/api/employee/get/all");
-        const branchResult = await axios.get("http://localhost:8080/api/branch/get/all");
-        
+        const employeeResult = await axios.get(`${BASE_URL}/api/employee/get/all`);
+        const branchResult = await axios.get(`${BASE_URL}/api/branch/get/all`);
+
         // Lưu danh sách branchs
         const branches = branchResult.data.data;
-    
+
         // Kết hợp branch address vào danh sách employees
         const employeesWithBranch = employeeResult.data.data.map((employee) => {
             const branch = branches.find((b) => b.branchID === employee.branchID);
@@ -51,18 +49,19 @@ const AdminEmployee = () => {
             const date = new Date(employee.dob);
             employee.dob = date.toLocaleDateString();
         });
-    
+
         setEmployees(employeesWithBranch);
     };
-    
+
 
     const loadbranchs = async () => {
-        const result = await axios.get("http://localhost:8080/api/branch/get/all");
+        const result = await axios.get(`${BASE_URL}/api/branch/get/all`);
         setbranchs(result.data.data);
     };
 
     const deleteEmployee = async (id) => {
-        await axios.delete(`http://localhost:8080/api/employee/delete/${id}`);
+        const respone = await axios.delete(`${BASE_URL}/api/employee/delete/${id}`);
+        CheckResponse(respone);
         loadEmployees();
     };
 
@@ -85,11 +84,13 @@ const AdminEmployee = () => {
     };
 
     const saveEmployee = async () => {
+        var respone;
         if (isEdit && selectedEmployee) {
-            await axios.put(`http://localhost:8080/api/employee/update/${selectedEmployee.employeeID}`, selectedEmployee);
+            respone = await axios.put(`${BASE_URL}/api/employee/update/${selectedEmployee.employeeID}`, selectedEmployee);
         } else {
-            await axios.post("http://localhost:8080/api/employee/create", newEmployee);
+            respone = await axios.post(`${BASE_URL}/api/employee/create`, newEmployee);
         }
+        CheckResponse(respone);
         loadEmployees();
     };
 
@@ -131,6 +132,7 @@ const AdminEmployee = () => {
                             <th>Phone</th>
                             <th>Email</th>
                             <th>Address</th>
+                            <th>Shift Salary</th>
                             <th>Branch</th>
                             <th>Actions</th>
                         </tr>
@@ -144,6 +146,7 @@ const AdminEmployee = () => {
                                 <td>{employee.phone}</td>
                                 <td>{employee.email}</td>
                                 <td>{employee.address}</td>
+                                <td>{employee.shiftSalary}</td>
                                 <td>{employee.branchAddress || "N/A"}</td> {/* Hiển thị tên branch */}
                                 <td>
                                     <button className="action-btn" data-bs-toggle="modal" data-bs-target="#employeeModal" onClick={() => handleViewEdit(employee, false)}>
@@ -237,6 +240,19 @@ const AdminEmployee = () => {
                                 />
                             </div>
                             <div className="form-group">
+                                <label>Shift Salary</label>
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    value={selectedEmployee ? selectedEmployee.shiftSalary : newEmployee.shiftSalary}
+                                    onChange={(e) =>
+                                        selectedEmployee
+                                            ? setSelectedEmployee({ ...selectedEmployee, shiftSalary: e.target.value })
+                                            : setNewEmployee({ ...newEmployee, shiftSalary: e.target.value })
+                                    }
+                                />
+                            </div>
+                            <div className="form-group">
                                 <label>Branch</label>
                                 <select
                                     className="form-control"
@@ -256,7 +272,6 @@ const AdminEmployee = () => {
                                 </select>
                             </div>
                         </div>
-
                         <div className="modal-footer">
                             {isEdit || !selectedEmployee ? (
                                 <button type="button" className="btn btn-primary" onClick={saveEmployee} data-bs-dismiss="modal">

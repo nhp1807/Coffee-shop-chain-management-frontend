@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import BASE_URL from "../../config";
+import CheckResponse from "../../api/CheckResponse";
 
 const AdminAccount = () => {
 
@@ -48,7 +49,9 @@ const AdminAccount = () => {
     };
 
     const deleteAccount = async (id) => {
-        await axios.delete(`${BASE_URL}/api/account/delete/${id}`);
+        const response = await axios.delete(`${BASE_URL}/api/account/delete/${id}`);
+        CheckResponse(response);
+
         loadAccounts();
     };
 
@@ -64,11 +67,13 @@ const AdminAccount = () => {
     };
 
     const saveAccount = async () => {
+        var response = null;
         if (isEdit && selectedAccount) {
-            await axios.put(`${BASE_URL}/api/account/update/${selectedAccount.accountID}`, selectedAccount);
+            response = await axios.put(`${BASE_URL}/api/account/update/${selectedAccount.accountID}`, selectedAccount);
         } else {
-            await axios.post(`${BASE_URL}/api/account/create`, newAccount);
+            response = await axios.post(`${BASE_URL}/api/account/create`, newAccount);
         }
+        CheckResponse(response);
         loadAccounts();
     };
 

@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import BASE_URL from "../../config";
+import CheckResponse from "../../api/CheckResponse";
 
 const AdminBranch = () => {
 
@@ -24,7 +25,8 @@ const AdminBranch = () => {
     };
 
     const deleteBranch = async (id) => {
-        await axios.delete(`${BASE_URL}/api/branch/delete/${id}`);
+        const reponse = await axios.delete(`${BASE_URL}/api/branch/delete/${id}`);
+        CheckResponse(reponse);
         loadBranches();
     };
 
@@ -40,11 +42,13 @@ const AdminBranch = () => {
     };
 
     const saveBranch = async () => {
+        var respone;
         if (isEdit && selectedBranch) {
-            await axios.put(`${BASE_URL}/api/branch/update/${selectedBranch.branchID}`, selectedBranch);
+            respone = await axios.put(`${BASE_URL}/api/branch/update/${selectedBranch.branchID}`, selectedBranch);
         } else {
-            await axios.post(`${BASE_URL}/api/branch/create`, newBranch);
+            respone = await axios.post(`${BASE_URL}/api/branch/create`, newBranch);
         }
+        CheckResponse(respone);
         loadBranches();
     };
 

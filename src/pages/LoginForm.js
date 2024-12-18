@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../assets/styles/LoginForm.css";  // Import file CSS
-import BASE_URL from "../config";
+import {BASE_URL} from "../config";
 
 const LoginForm = () => {
     const [username, setUsername] = useState("");

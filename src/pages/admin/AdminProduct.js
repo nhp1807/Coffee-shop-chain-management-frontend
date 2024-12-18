@@ -3,7 +3,7 @@ import axios from "axios";
 import "../../assets/styles/AdminObject.css";
 import AdminSideBar from "../../components/sidebar/AdminSideBar";
 import { useNavigate } from "react-router-dom";
-import BASE_URL from "../../config";
+import {BASE_URL} from "../../config";
 import CheckResponse from "../../api/CheckResponse";
 
 const AdminProduct = () => {
@@ -119,13 +119,13 @@ const AdminProduct = () => {
                             <td>{product.recipe}</td>
                             <td className="actions-column">
                                 <button
-                                    className="action-btn"
+                                    className="action-btn view"
                                     onClick={() => handleViewEditProduct(product.productID)}
                                 >
                                     View/Edit
                                 </button>
                                 <button
-                                    className="action-btn"
+                                    className="action-btn delete"
                                     onClick={() => handleDeleteProduct(product.productID)}
                                 >
                                     Delete

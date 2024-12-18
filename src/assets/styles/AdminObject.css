@@ -55,10 +55,29 @@
 
 .add-item-btn {
     padding: 10px 20px;
-    background-color: #3498db;
+    background-color: #27ae60;  /* Màu xanh lá */
     color: white;
     border: none;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.add-item-btn:hover {
+    background-color: #2ecc71;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-item-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .menu input {
@@ -85,17 +104,52 @@
     background-color: #f4f4f4;
 }
 
-.action-btn {
-    padding: 5px 10px;
-    background-color: #2980b9;
-    color: white;
-    border: none;
-    cursor: pointer;
-    margin-right: 5px;
+/* Nút Thêm - Màu xanh lá */
+.action-btn.view {
+    background-color: #27ae60;  /* xanh lá */
 }
 
-.action-btn:hover {
-    background-color: #1abc9c;
+.action-btn.view:hover {
+    background-color: #2ecc71;
+}
+
+/* Nút Xác nhận - Màu vàng */
+.action-btn.confirm {
+    background-color: #f1c40f;  /* vàng */
+}
+
+.action-btn.confirm:hover {
+    background-color: #f39c12;
+}
+
+/* Nút Sửa - Màu xanh dương */
+.action-btn.edit {
+    background-color: #2980b9;  /* xanh dương */
+}
+
+.action-btn.edit:hover {
+    background-color: #3498db;
+}
+
+/* Nút Xóa - Màu đỏ */
+.action-btn.delete {
+    background-color: #c0392b;  /* đỏ */
+}
+
+.action-btn.delete:hover {
+    background-color: #e74c3c;
+}
+
+/* Style chung cho tất cả các nút */
+.action-btn {
+    padding: 5px 10px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
 .pagination {

@@ -214,7 +214,7 @@ const ExportOrderDetail = () => {
             <ManagerSideBar />
             <div className="content">
                 <div className="header">
-                    <h1>{exportOrderID === "new" ? "Add New Import Order" : "Edit Import Order"}</h1>
+                    <h1>{exportOrderID === "new" ? "Add New Export Order" : "Edit Export Order"}</h1>
                 </div>
 
                 <div className="menu">
